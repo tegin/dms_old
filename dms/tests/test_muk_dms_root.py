@@ -21,9 +21,27 @@
 #
 ###################################################################################
 
-from . import test_muk_dms_root
-from . import test_muk_dms_directory
-from . import test_muk_dms_file
-from . import test_muk_dms_data
-from . import test_muk_dms_js
+import os
+import base64
+import unittest
 
+from openerp import _
+from openerp.tests import common
+
+from . import muk_dms_test as dms_test
+
+_path = os.path.dirname(os.path.dirname(__file__))
+
+class RootTestCase(dms_test.DMSTestCase):
+    
+    @unittest.expectedFailure  
+    def test_root_constrain(self):
+        sub_dir = self.dir_model.create({'name': 'New_Directory', 'parent_id': self.root_dir.id})
+        root = self.root_model.create({'name': 'Database Settings', 'root_directory': sub_dir.id, 'save_type': 'database'})
+        
+    @unittest.expectedFailure  
+    def test_root_file_constrain(self):
+        dir = self.dir_model.create({'name': 'New_Directory'})
+        file = open(os.path.join(_path, 'static/demo/Sample.pdf'), 'r')
+        file_read = file.read()
+        return self.file_model.create({'directory': dir.id, 'filename': 'Sample.pdf', 'file': base64.encodestring(file_read)})

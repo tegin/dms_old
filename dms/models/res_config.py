@@ -21,9 +21,29 @@
 #
 ###################################################################################
 
-from . import test_muk_dms_root
-from . import test_muk_dms_directory
-from . import test_muk_dms_file
-from . import test_muk_dms_data
-from . import test_muk_dms_js
+from openerp import models, fields
 
+class DMSConfigSettings(models.TransientModel):
+
+    _name = 'muk_dms.config.settings'
+    _inherit = 'res.config.settings'
+
+    module_muk_dms_file = fields.Boolean('File System Support',
+        help='Save Documents to a local file system.\n'
+        '- This installs the module muk_dms_file.'
+    )
+    
+    module_muk_dms_finder = fields.Boolean('Document Finder',
+        help='Provides a Web Finder to manage the Documents.\n'
+        '- This installs the module muk_dms_finder.'
+    )
+    
+    module_muk_dms_access = fields.Boolean('Access Rights',
+        help='Adds additional access rights for Documents.\n'
+        '- This installs the module muk_dms_access.'
+    )
+    
+    module_muk_dms_search = fields.Boolean('Advanced Search',
+        help='Adds a full-text search for Documents.\n'
+        '- This installs the module muk_dms_search.'
+    )

@@ -21,9 +21,26 @@
 #
 ###################################################################################
 
-from . import test_muk_dms_root
-from . import test_muk_dms_directory
-from . import test_muk_dms_file
-from . import test_muk_dms_data
-from . import test_muk_dms_js
+import logging
 
+from openerp import models, api, fields
+
+_logger = logging.getLogger(__name__)
+
+class Lock(models.Model):
+    _name = 'muk_dms.lock'
+    _description = "Directory or File lock"
+
+    name = fields.Char(compute='_compute_name', string="Name")
+
+    locked_by = fields.Char(string="Locked by", required=True)
+    locked_by_ref = fields.Reference([('res.users', 'User')], string="User Reference")
+
+    lock_ref = fields.Reference([], string="Object Reference", required=True)
+    
+    token = fields.Char(string="Token")
+    
+    @api.one
+    @api.depends('lock_ref')
+    def _compute_name(self):
+        self.name = "Lock for " + str(self.lock_ref.name)

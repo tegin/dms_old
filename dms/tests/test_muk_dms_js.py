@@ -21,9 +21,15 @@
 #
 ###################################################################################
 
-from . import test_muk_dms_root
-from . import test_muk_dms_directory
-from . import test_muk_dms_file
-from . import test_muk_dms_data
-from . import test_muk_dms_js
+import unittest
 
+from openerp.tests import common
+
+class JSTestCase(common.HttpCase):
+
+    def test_js(self):
+        self.phantom_js('/web/tests?module=muk_dms.test_widgets',"","", login='admin')
+    
+    def test_tour(self):
+        self.phantom_js("/", "openerp.Tour.run('dms_base', 'test')",
+                        "openerp.Tour.tours.dms_base", login="admin")

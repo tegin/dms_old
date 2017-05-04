@@ -1,13 +1,30 @@
-from . import mixins_thumbnail
-from . import dms_security_mixin
+# -*- coding: utf-8 -*-
 
-from . import storage
-from . import directory
-from . import dms_file
+###################################################################################
+# 
+#    MuK Document Management System
+#
+#    Copyright (C) 2017 MuK IT GmbH
+#
+#    This program is free software: you can redistribute it and/or modify
+#    it under the terms of the GNU Affero General Public License as
+#    published by the Free Software Foundation, either version 3 of the
+#    License, or (at your option) any later version.
+#
+#    This program is distributed in the hope that it will be useful,
+#    but WITHOUT ANY WARRANTY; without even the implied warranty of
+#    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+#    GNU Affero General Public License for more details.
+#
+#    You should have received a copy of the GNU Affero General Public License
+#    along with this program.  If not, see <http://www.gnu.org/licenses/>.
+#
+###################################################################################
 
-from . import category
-from . import tag
-
-# from . import ir_http
-from . import res_company
-from . import res_config_settings
+from . import muk_dms_base
+from . import muk_dms_root
+from . import muk_dms_directory
+from . import muk_dms_file
+from . import muk_dms_data
+from . import muk_dms_lock
+from . import res_config
