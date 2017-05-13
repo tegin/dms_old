@@ -1,37 +1,69 @@
-# Copyright 2017-2019 MuK IT GmbH
-# License LGPL-3.0 or later (http://www.gnu.org/licenses/lgpl).
+# -*- coding: utf-8 -*-
+
+###################################################################################
+# 
+#    MuK Document Management System
+#
+#    Copyright (C) 2017 MuK IT GmbH
+#
+#    This program is free software: you can redistribute it and/or modify
+#    it under the terms of the GNU Affero General Public License as
+#    published by the Free Software Foundation, either version 3 of the
+#    License, or (at your option) any later version.
+#
+#    This program is distributed in the hope that it will be useful,
+#    but WITHOUT ANY WARRANTY; without even the implied warranty of
+#    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+#    GNU Affero General Public License for more details.
+#
+#    You should have received a copy of the GNU Affero General Public License
+#    along with this program.  If not, see <http://www.gnu.org/licenses/>.
+#
+###################################################################################
 
 {
-    "name": "DMS",
-    "summary": """Document Management System""",
-    "version": "13.0.1.0.0",
-    "category": "Document Management",
-    "license": "LGPL-3",
-    "website": "http://github.com/OCA/dms",
-    "author": "MuK IT,Odoo Community Association (OCA)",
-    "depends": ["web"],
-    "data": [
-        "security/security.xml",
-        "security/ir.model.access.csv",
-        "actions/file.xml",
-        "template/assets.xml",
-        "template/onboarding.xml",
-        "views/menu.xml",
-        "views/tag.xml",
-        "views/category.xml",
-        "views/dms_file.xml",
-        "views/directory.xml",
-        "views/storage.xml",
-        "views/res_config_settings.xml",
+    'name': "MuK Documents",
+    'summary': """Document Management System""",
+    'version': '10.0.1.0.0',   
+    'category': 'Documents',   
+    'license': 'AGPL-3',    
+    'author': "MuK IT",
+    'website': "http://www.mukit.at",
+    'contributors': [
+        "Mathias Markl <mathias.markl@mukit.at>",
+        "Kerrim Abdelhamed <kerrim.adbelhamed@mukit.at>",
     ],
-    "demo": [
-        "demo/res_users.xml",
-        "demo/category.xml",
-        "demo/tag.xml",
-        "demo/storage.xml",
-        "demo/directory.xml",
-        "demo/file.xml",
+    'depends': [
+        'base', 'web', 'mail', 'base_action_rule'
     ],
-    "images": ["static/description/banner.png"],
-    "application": True,
+    'data': [
+        'security/muk_dms_security.xml',
+        'security/ir.model.access.csv',
+        'views/muk_dms_view.xml',
+        'views/muk_dms_view_tree.xml',
+        'views/muk_dms_view_root.xml',
+        'views/muk_dms_view_directory.xml',
+        'views/muk_dms_view_file.xml',
+        'views/muk_dms_view_data.xml',
+        'views/muk_dms_view_lock.xml',
+        'views/muk_dms_template_update.xml',
+        'views/res_config.xml',
+        'data/muk_dms_data.xml',
+    ],
+    'qweb': [
+        'static/src/xml/*.xml'
+    ],
+    'test': [
+        'static/test/test_muk_dms_widgets.js'
+    ],
+    'demo': [
+        'demo/muk_dms_demo_directory.xml',
+        'demo/muk_dms_demo_root.xml',
+        'demo/muk_dms_demo_file.xml',
+    ],
+    'images': [
+        'static/description/banner.png'
+    ],
+    'installable': True,
+    'application': True,
 }
