@@ -19,4 +19,22 @@
 #
 ###################################################################################
 
-from . import main
+import os
+import base64
+import unittest
+
+from odoo import _
+from odoo.tests import common
+
+_path = os.path.dirname(os.path.dirname(__file__))
+
+class DMSTestCase(common.TransactionCase):
+    
+    at_install = True
+    post_install = False
+    
+    def setUp(self):
+        super(DMSTestCase, self).setUp()
+        
+    def tearDown(self):
+        super(DMSTestCase, self).tearDown()
