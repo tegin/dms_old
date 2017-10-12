@@ -632,7 +632,6 @@ class File(models.Model):
 import os
 import re
 import json
-import urllib
 import base64
 import logging
 import mimetypes
@@ -791,7 +790,7 @@ class File(dms_base.DMSModel):
                           
     def _compute_mimetype(self, write=True):
         def get_mimetype(record):
-            mimetype = mimetypes.guess_type(urllib.pathname2url(record.name))[0]
+            mimetype = mimetypes.guess_type(record.name)[0]
             if (not mimetype or mimetype == 'application/octet-stream') and record.content:
                 mimetype = guess_mimetype(base64.b64decode(record.content))
             return mimetype or 'application/octet-stream'
@@ -938,15 +937,19 @@ class File(dms_base.DMSModel):
     
     def _create_reference(self, settings, path, filename, content):
         self.ensure_one()
+        self.check_access('create', raise_exception=True)
         if settings.save_type == 'database':
             return self.env['muk_dms.data_database'].sudo().create({'data': content})
         return None
     
     def _update_reference_content(self, content):
+        self.ensure_one()     
+        self.check_access('write', raise_exception=True)
         self.reference.sudo().update({'content': content})
     
     def _update_reference_type(self):
-        self.ensure_one()        
+        self.ensure_one()     
+        self.check_access('write', raise_exception=True)
         if self.reference and self.settings.save_type != self.reference.type():
             reference = self._create_reference(self.settings, self.directory.path, self.name, self.content)
             self._unlink_reference()
@@ -954,6 +957,7 @@ class File(dms_base.DMSModel):
     
     def _check_reference_values(self, values):
         self.ensure_one()
+        self.check_access('write', raise_exception=True)
         if 'content' in values:
             self._update_reference_content(values['content'])
         if 'settings' in values:
@@ -961,11 +965,12 @@ class File(dms_base.DMSModel):
     
     def _get_content(self):
         self.ensure_one()
+        self.check_access('read', raise_exception=True)
         return self.reference.sudo().content() if self.reference else None
     
     def _unlink_reference(self):
         self.ensure_one()
+        self.check_access('unlink', raise_exception=True)
         if self.reference:
             self.reference.sudo().delete()
-            self.reference.sudo().unlink()
->>>>>>> update
+            self.reference.sudo().unlink()>>>>>>> update
