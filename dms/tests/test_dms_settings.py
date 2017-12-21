@@ -19,5 +19,31 @@
 #
 ###################################################################################
 
-from . import dms_case
-from . import test_dms_settings
+import os
+import base64
+import logging
+import unittest
+
+from odoo import _
+from odoo.tests import common
+
+from odoo.tests import common
+
+from odoo.addons.muk_dms.tests import dms_case
+
+_path = os.path.dirname(os.path.dirname(__file__))
+_logger = logging.getLogger(__name__)
+
+class SettingsTestCase(dms_case.DMSTestCase):
+    
+    def setUp(self):
+        super(SettingsTestCase, self).setUp()
+        
+    def tearDown(self):
+        super(SettingsTestCase, self).tearDown()
+    
+    @unittest.expectedFailure  
+    def test_compute_root_top_directories(self):
+        _logger.info(self.browse_ref("muk_dms.settings_demo"))
+        
+    
