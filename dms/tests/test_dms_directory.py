@@ -23,20 +23,36 @@ import os
 import base64
 import logging
 import unittest
+import collections
 
 from odoo import _
 from odoo.tests import common
 
+from odoo.tests import common
+
+from odoo.addons.muk_dms.tests import dms_case
+
 _path = os.path.dirname(os.path.dirname(__file__))
 _logger = logging.getLogger(__name__)
 
-class DMSTestCase(common.TransactionCase):
-    
-    at_install = True
-    post_install = False
+class DirectoryTestCase(dms_case.DMSTestCase):
     
     def setUp(self):
-        super(DMSTestCase, self).setUp()
+        super(SettingsTestCase, self).setUp()
         
     def tearDown(self):
-        super(DMSTestCase, self).tearDown()
+        super(SettingsTestCase, self).tearDown()
+    
+    def test_create_directory(self):
+        settings = self.browse_ref("muk_dms.settings_demo").sudo()
+        root_directory = self.env['muk_dms.directory'].sudo().create({
+            'name': "RootTestDir",
+            'is_root_directory': True,
+            'settings': settings.id})
+        self.assertTrue(root_directory.settings.id == settings.id)
+        sub_directory = self.env['muk_dms.directory'].sudo().create({
+            'name': "SubTestDir",
+            'is_root_directory': False,
+            'parent_directory': root_directory.id})
+        self.assertTrue(sub_directory.settings.id == settings.id)
+        self.assertTrue(root_directory.count_directories == 1)
