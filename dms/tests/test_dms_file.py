@@ -27,19 +27,38 @@ import unittest
 from odoo import _
 from odoo.tests import common
 
+from odoo.tests import common
+
+from odoo.addons.muk_dms.tests import dms_case
+
 _path = os.path.dirname(os.path.dirname(__file__))
 _logger = logging.getLogger(__name__)
 
-class DMSTestCase(common.TransactionCase):
-    
-    at_install = True
-    post_install = False
+class FileTestCase(dms_case.DMSTestCase):
     
     def setUp(self):
-        super(DMSTestCase, self).setUp()
+        super(FileTestCase, self).setUp()
         
     def tearDown(self):
-        super(DMSTestCase, self).tearDown()
+        super(FileTestCase, self).tearDown()
+    
+    def test_create_file(self):
+        directory = self.browse_ref("directory_12_demo").sudo()
+        file = self.env['muk_dms.file'].sudo().create({
+            'name': "file.txt",
+            'directory': directory.id,
+            'content': self.file_base64})
+        self.assertTrue(file.extension == '.txt')
         
-    def file_base64(self):
-        return "SGVsbG8gV29ybGQh"
+    def test_compute_thumbnail(self):
+        file = self.browse_ref("muk_dms.file_14_demo").sudo()
+        self.assertTrue(file.thumbnail)
+        
+    def test_unlink_directory(self):
+        directory = self.browse_ref("directory_12_demo").sudo()
+        file = self.env['muk_dms.file'].sudo().create({
+            'name': "file.txt",
+            'directory': directory.id,
+            'content': self.file_base64})
+        file.unlink()
+        self.assertFalse(file.exists())
