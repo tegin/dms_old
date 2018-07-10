@@ -6,10 +6,10 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 11.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-12-26 17:05+0000\n"
-"PO-Revision-Date: 2017-12-26 17:05+0000\n"
+"POT-Creation-Date: 2018-06-25 09:17+0000\n"
+"PO-Revision-Date: 2018-06-25 09:17+0000\n"
 "Last-Translator: <>\n"
-"Language-Team: \n"
+"Language-Team: Center of Research & Development\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: \n"
@@ -17,179 +17,233 @@ msgstr ""
 
 #. module: muk_dms
 #. openerp-web
-#: code:addons/muk_dms/static/src/js/views/dms_views_documents.js:572
+#: code:addons/muk_dms/static/src/js/views/dms_views_documents.js:614
 #, python-format
 msgid " couldn't be copied!"
-msgstr ""
+msgstr " не можна копіювати!"
 
 #. module: muk_dms
 #. openerp-web
-#: code:addons/muk_dms/static/src/js/views/dms_views_documents.js:545
+#: code:addons/muk_dms/static/src/js/views/dms_views_documents.js:875
+#: code:addons/muk_dms/static/src/js/views/dms_views_documents.js:900
+#, python-format
+msgid " couldn't be created!"
+msgstr " не можна створити!"
+
+#. module: muk_dms
+#. openerp-web
+#: code:addons/muk_dms/static/src/js/views/dms_views_documents.js:586
 #, python-format
 msgid " couldn't be deleted!"
-msgstr ""
-
-#. module: muk_dms
-#. openerp-web
-#: code:addons/muk_dms/static/src/js/views/dms_views_documents.js:529
-#, python-format
-msgid " couldn't be moved!"
-msgstr ""
-
-#. module: muk_dms
-#. openerp-web
-#: code:addons/muk_dms/static/src/js/views/dms_views_documents.js:588
-#, python-format
-msgid " couldn't be renamed!"
-msgstr ""
+msgstr " не можна видалити!"
 
 #. module: muk_dms
 #. openerp-web
 #: code:addons/muk_dms/static/src/js/views/dms_views_documents.js:569
 #, python-format
-msgid " has been copied!"
-msgstr ""
+msgid " couldn't be moved!"
+msgstr " не можна перемістити!"
 
 #. module: muk_dms
 #. openerp-web
-#: code:addons/muk_dms/static/src/js/views/dms_views_documents.js:542
+#: code:addons/muk_dms/static/src/js/views/dms_views_documents.js:630
+#, python-format
+msgid " couldn't be renamed!"
+msgstr " не можно перейменувати!"
+
+#. module: muk_dms
+#. openerp-web
+#: code:addons/muk_dms/static/src/js/views/dms_views_documents.js:610
+#, python-format
+msgid " has been copied!"
+msgstr " було скопійовано!"
+
+#. module: muk_dms
+#. openerp-web
+#: code:addons/muk_dms/static/src/js/views/dms_views_documents.js:873
+#, python-format
+msgid " has been created!"
+msgstr " було створено!"
+
+#. module: muk_dms
+#. openerp-web
+#: code:addons/muk_dms/static/src/js/views/dms_views_documents.js:582
 #, python-format
 msgid " has been deleted!"
-msgstr ""
+msgstr " було видалено!"
 
 #. module: muk_dms
 #. openerp-web
-#: code:addons/muk_dms/static/src/js/views/dms_views_documents.js:526
+#: code:addons/muk_dms/static/src/js/views/dms_views_documents.js:565
 #, python-format
 msgid " has been moved!"
-msgstr ""
+msgstr " було перенесено!"
 
 #. module: muk_dms
 #. openerp-web
-#: code:addons/muk_dms/static/src/js/views/dms_views_documents.js:585
+#: code:addons/muk_dms/static/src/js/views/dms_views_documents.js:627
 #, python-format
 msgid " has been renamed!"
-msgstr ""
+msgstr " було перейменовано!"
 
 #. module: muk_dms
 #: model:ir.ui.view,arch_db:muk_dms.res_config_settings_view_form
 msgid ".exe,.msi"
-msgstr ""
+msgstr ".exe,.msi"
 
 #. module: muk_dms
 #: code:addons/muk_dms/models/dms_file.py:277
 #, python-format
 msgid "A file with the same name already exists."
-msgstr ""
+msgstr "Файл з тим самим ім'ям вже існує."
 
 #. module: muk_dms
 #: model:ir.model.fields,field_description:muk_dms.field_res_config_settings_module_muk_dms_access
 msgid "Access Control"
-msgstr ""
+msgstr "Управління доступом"
 
 #. module: muk_dms
 #: model:ir.ui.view,arch_db:muk_dms.view_dms_directory_form
 #: model:ir.ui.view,arch_db:muk_dms.view_dms_file_form
 msgid "Access Information"
-msgstr ""
+msgstr "Доступ до інформації"
 
 #. module: muk_dms
 #. openerp-web
-#: code:addons/muk_dms/static/src/js/views/dms_views_documents.js:681
+#: code:addons/muk_dms/static/src/js/views/dms_views_documents.js:725
 #, python-format
 msgid "Actions"
-msgstr ""
+msgstr "Дії"
 
 #. module: muk_dms
 #: model:res.groups,name:muk_dms.group_dms_admin
 msgid "Administrator"
-msgstr ""
+msgstr "Адміністратор"
 
 #. module: muk_dms
 #: model:ir.ui.view,arch_db:muk_dms.view_dms_settings_form
 msgid "All Directories"
-msgstr ""
+msgstr "Усі каталоги"
 
 #. module: muk_dms
 #: model:ir.ui.view,arch_db:muk_dms.view_dms_settings_form
 msgid "All Files"
-msgstr ""
+msgstr "Усі файли"
+
+#. module: muk_dms
+#: model:ir.model.fields,help:muk_dms.field_res_config_settings_module_muk_dms_attachment_rules
+#: model:ir.ui.view,arch_db:muk_dms.res_config_settings_view_form
+msgid "Allows attachments to be automatically placed in the right directory."
+msgstr "Дозволяє додавати вкладені файли в потрібний каталог."
+
+#. module: muk_dms
+#: model:ir.model.fields,help:muk_dms.field_res_config_settings_module_muk_dms_attachment
+#: model:ir.ui.view,arch_db:muk_dms.res_config_settings_view_form
+msgid "Allows attachments to be stored inside of MuK Documents."
+msgstr "Дозволяє зберігати вкладення в документах MuK."
 
 #. module: muk_dms
 #: model:ir.model.fields,help:muk_dms.field_res_config_settings_module_muk_dms_access
 #: model:ir.ui.view,arch_db:muk_dms.res_config_settings_view_form
 msgid "Allows the creation of groups to define access rights."
-msgstr ""
+msgstr "Дозволяє створювати групи для визначення прав доступу."
+
+#. module: muk_dms
+#: model:ir.model.fields,field_description:muk_dms.field_res_config_settings_module_muk_dms_attachment
+msgid "Attachment Storage Location"
+msgstr "Місце зберігання вкладених файлів"
+
+#. module: muk_dms
+#: model:ir.model.fields,field_description:muk_dms.field_res_config_settings_module_muk_dms_attachment_rules
+msgid "Attachment Storage Rules"
+msgstr "Правила зберігання вкладених "
 
 #. module: muk_dms
 #: model:ir.model,name:muk_dms.model_muk_dms_data
 msgid "Base Data Model"
-msgstr ""
+msgstr "Базова модел даних"
+
+#. module: muk_dms
+#: model:ir.ui.view,arch_db:muk_dms.res_config_settings_view_form
+msgid "Base Extensions"
+msgstr "Базові розширення"
 
 #. module: muk_dms
 #: code:addons/muk_dms/models/dms_settings.py:140
 #, python-format
 msgid "Changing the settings can cause a heavy migration process."
-msgstr ""
+msgstr "Зміна параметрів може призвести до важкого процесу міграції."
 
 #. module: muk_dms
 #: model:ir.actions.act_window,help:muk_dms.action_dms_directory
 #: model:ir.actions.act_window,help:muk_dms.action_dms_directory_subdirectories
 msgid "Click to add a new directory."
-msgstr ""
+msgstr "Натисніть, щоб додати новий каталог."
 
 #. module: muk_dms
 #: model:ir.actions.act_window,help:muk_dms.action_dms_directory_files
 #: model:ir.actions.act_window,help:muk_dms.action_dms_file
 msgid "Click to add a new file."
-msgstr ""
+msgstr "Натисніть, щоб додати новий файл."
 
 #. module: muk_dms
 #: model:ir.actions.act_window,help:muk_dms.action_dms_settings
 msgid "Click to create a new Settings object."
-msgstr ""
+msgstr "Натисніть, щоб створити новий об'єкт налаштувань"
+
+#. module: muk_dms
+#: model:ir.ui.view,arch_db:muk_dms.res_config_settings_view_form
+msgid "Client Extensions"
+msgstr "Клієнтські розширення"
+
+#. module: muk_dms
+#: model:ir.model.fields,field_description:muk_dms.field_muk_dms_access_complete_groups
+#: model:ir.model.fields,field_description:muk_dms.field_muk_dms_directory_complete_groups
+#: model:ir.model.fields,field_description:muk_dms.field_muk_dms_file_complete_groups
+msgid "Complete Groups"
+msgstr "Повні групи"
 
 #. module: muk_dms
 #: model:ir.ui.menu,name:muk_dms.cat_menu_muk_dms_config
 msgid "Configuration"
-msgstr ""
+msgstr "Налаштування"
 
 #. module: muk_dms
 #: model:ir.model.fields,field_description:muk_dms.field_muk_dms_data_database_data
 #: model:ir.model.fields,field_description:muk_dms.field_muk_dms_file_content
 msgid "Content"
-msgstr ""
+msgstr "Вміст"
 
 #. module: muk_dms
 #. openerp-web
-#: code:addons/muk_dms/static/src/js/views/dms_views_documents.js:701
+#: code:addons/muk_dms/static/src/js/views/dms_views_documents.js:745
 #, python-format
 msgid "Copy"
-msgstr ""
+msgstr "Копіювати"
 
 #. module: muk_dms
 #. openerp-web
-#: code:addons/muk_dms/static/src/js/views/dms_views_documents.js:733
+#: code:addons/muk_dms/static/src/js/views/dms_views_documents.js:777
 #: model:ir.model.fields,field_description:muk_dms.field_muk_dms_access_perm_create
 #: model:ir.model.fields,field_description:muk_dms.field_muk_dms_directory_perm_create
 #: model:ir.model.fields,field_description:muk_dms.field_muk_dms_file_perm_create
 #, python-format
 msgid "Create"
-msgstr ""
+msgstr "Створити"
 
 #. module: muk_dms
 #. openerp-web
-#: code:addons/muk_dms/static/src/js/widgets/dms_widgets_directory.js:135
+#: code:addons/muk_dms/static/src/js/widgets/dms_widgets_directory.js:137
 #, python-format
 msgid "Create \"<strong>%s</strong>\""
-msgstr ""
+msgstr "Створити \"<strong>%s</strong>\""
 
 #. module: muk_dms
 #. openerp-web
-#: code:addons/muk_dms/static/src/js/widgets/dms_widgets_directory.js:147
+#: code:addons/muk_dms/static/src/js/widgets/dms_widgets_directory.js:149
 #, python-format
 msgid "Create and Edit..."
-msgstr ""
+msgstr "Створити та редагувати..."
 
 #. module: muk_dms
 #: model:ir.model.fields,field_description:muk_dms.field_muk_dms_data_database_create_uid
@@ -198,7 +252,7 @@ msgstr ""
 #: model:ir.model.fields,field_description:muk_dms.field_muk_dms_lock_create_uid
 #: model:ir.model.fields,field_description:muk_dms.field_muk_dms_settings_create_uid
 msgid "Created by"
-msgstr ""
+msgstr "Створив"
 
 #. module: muk_dms
 #: model:ir.model.fields,field_description:muk_dms.field_muk_dms_data_database_create_date
@@ -207,20 +261,20 @@ msgstr ""
 #: model:ir.model.fields,field_description:muk_dms.field_muk_dms_lock_create_date
 #: model:ir.model.fields,field_description:muk_dms.field_muk_dms_settings_create_date
 msgid "Created on"
-msgstr ""
+msgstr "Дата створення"
 
 #. module: muk_dms
 #: model:ir.model.fields,field_description:muk_dms.field_muk_dms_directory_custom_thumbnail
 #: model:ir.model.fields,field_description:muk_dms.field_muk_dms_file_custom_thumbnail
 msgid "Custom Thumbnail"
-msgstr ""
+msgstr "Користувацький ескіз"
 
 #. module: muk_dms
 #. openerp-web
-#: code:addons/muk_dms/static/src/js/views/dms_views_documents.js:688
+#: code:addons/muk_dms/static/src/js/views/dms_views_documents.js:732
 #, python-format
 msgid "Cut"
-msgstr ""
+msgstr "Вирізати"
 
 #. module: muk_dms
 #: code:addons/muk_dms/models/dms_file.py:70
@@ -229,66 +283,62 @@ msgstr ""
 #: selection:muk_dms.file,reference:0
 #, python-format
 msgid "Data"
-msgstr ""
+msgstr "Дані"
 
 #. module: muk_dms
 #: model:ir.actions.act_window,name:muk_dms.action_dms_data_database
 msgid "Data Database"
-msgstr ""
+msgstr "Дані бази даних"
 
 #. module: muk_dms
 #: model:ir.model.fields,field_description:muk_dms.field_muk_dms_file_reference
 msgid "Data Reference"
-msgstr ""
+msgstr "Data Reference"
 
 #. module: muk_dms
 #: model:ir.ui.view,arch_db:muk_dms.view_dms_settings_form
 msgid "Data Settings"
-msgstr ""
+msgstr "Data Settings"
 
 #. module: muk_dms
 #: code:addons/muk_dms/models/dms_settings.py:45
+#: model:ir.ui.menu,name:muk_dms.menu_dms_data_database
 #: selection:muk_dms.settings,save_type:0
 #, python-format
 msgid "Database"
-msgstr ""
-
-#. module: muk_dms
-#: model:ir.ui.menu,name:muk_dms.menu_dms_data_database
-msgid "Database Data"
-msgstr ""
+msgstr "База диних"
 
 #. module: muk_dms
 #: model:ir.model,name:muk_dms.model_muk_dms_data_database
 msgid "Database Data Model"
-msgstr ""
+msgstr "Database Data Model"
 
 #. module: muk_dms
 #: model:ir.model.fields,help:muk_dms.field_res_config_settings_forbidden_extensions
 msgid "Defines a list of forbidden file extensions. (Example: '.exe,.msi')"
-msgstr ""
+msgstr "Визначає список заборонених розширень файлів. (Наприклад: '.exe,.msi')"
 
 #. module: muk_dms
 #: model:ir.ui.view,arch_db:muk_dms.res_config_settings_view_form
 msgid "Defines the maximum upload size and forbidden file extensions."
-msgstr ""
+msgstr "Визначає максимальний розмір завантаження та заборонені розширення файлів."
 
 #. module: muk_dms
 #: model:ir.model.fields,help:muk_dms.field_res_config_settings_max_upload_size
 msgid "Defines the maximum upload size in MB. Default (25MB)"
-msgstr ""
+msgstr "Визначає максимальний розмір завантаження в МБ. За замовчуванням (25 Мб)"
 
 #. module: muk_dms
 #. openerp-web
 #: code:addons/muk_dms/static/src/js/views/dms_views_directory.js:76
-#: code:addons/muk_dms/static/src/js/views/dms_views_documents.js:665
+#: code:addons/muk_dms/static/src/js/views/dms_views_documents.js:709
 #: code:addons/muk_dms/static/src/js/views/dms_views_file.js:88
 #: model:ir.model.fields,field_description:muk_dms.field_muk_dms_access_perm_unlink
 #: model:ir.model.fields,field_description:muk_dms.field_muk_dms_directory_perm_unlink
 #: model:ir.model.fields,field_description:muk_dms.field_muk_dms_file_perm_unlink
 #, python-format
 msgid "Delete"
-msgstr ""
+msgstr "Видалити"
 
 #. module: muk_dms
 #: model:ir.model.fields,field_description:muk_dms.field_muk_dms_settings_settings_directories
@@ -296,47 +346,53 @@ msgstr ""
 #: model:ir.ui.view,arch_db:muk_dms.view_dms_directory_tree
 #: model:ir.ui.view,arch_db:muk_dms.view_dms_settings_form
 msgid "Directories"
-msgstr ""
+msgstr "Каталоги"
+
+#. module: muk_dms
+#: model:ir.ui.view,arch_db:muk_dms.view_dms_settings_form
+msgid "Directories & Files"
+msgstr "Каталоги & Файли"
 
 #. module: muk_dms
 #: model:ir.actions.act_window,help:muk_dms.action_dms_directory
 #: model:ir.actions.act_window,help:muk_dms.action_dms_directory_subdirectories
 msgid "Directories can be used to structure and organize\n"
 "			files directly in Odoo."
-msgstr ""
+msgstr "Каталоги можуть бути використані для структури та організації\n"
+"			файпів безпосередньо в Odoo."
 
 #. module: muk_dms
 #: model:ir.model.fields,help:muk_dms.field_muk_dms_settings_top_directories
 msgid "Directories which have no parent or the user has no access right to those parents."
-msgstr ""
+msgstr "Каталоги, які не мають батьків або користувач не має права доступу до цих батьків."
 
 #. module: muk_dms
 #. openerp-web
 #: code:addons/muk_dms/static/src/xml/dms_views.xml:96
 #, python-format
 msgid "Directories:"
-msgstr ""
+msgstr "Каталоги:"
 
 #. module: muk_dms
 #. openerp-web
-#: code:addons/muk_dms/static/src/js/views/dms_views_documents.js:739
+#: code:addons/muk_dms/static/src/js/views/dms_views_documents.js:783
 #: model:ir.model.fields,field_description:muk_dms.field_muk_dms_file_directory
 #: model:ir.ui.view,arch_db:muk_dms.view_dms_directory_form
 #, python-format
 msgid "Directory"
-msgstr ""
+msgstr "Каталог"
 
 #. module: muk_dms
 #: model:ir.model,name:muk_dms.model_muk_dms_lock
 msgid "Directory or File Lock"
-msgstr ""
+msgstr "Блокування Каталогів чи Файлів"
 
 #. module: muk_dms
 #. openerp-web
 #: code:addons/muk_dms/static/src/xml/dms_views.xml:52
 #, python-format
 msgid "Disable Refresh"
-msgstr ""
+msgstr "Вимкнути оновлення"
 
 #. module: muk_dms
 #: model:ir.model.fields,field_description:muk_dms.field_muk_dms_access_display_name
@@ -347,41 +403,40 @@ msgstr ""
 #: model:ir.model.fields,field_description:muk_dms.field_muk_dms_lock_display_name
 #: model:ir.model.fields,field_description:muk_dms.field_muk_dms_settings_display_name
 msgid "Display Name"
-msgstr ""
+msgstr "Назва для відображення"
 
 #. module: muk_dms
 #: model:ir.actions.act_window,name:muk_dms.action_dms_directory
 msgid "Document Directories"
-msgstr ""
+msgstr "Каталоги документів"
 
 #. module: muk_dms
 #: model:ir.actions.act_window,name:muk_dms.action_dms_directory_files
 #: model:ir.actions.act_window,name:muk_dms.action_dms_file
 msgid "Document Files"
-msgstr ""
+msgstr "Файли документів"
 
 #. module: muk_dms
 #: model:ir.ui.menu,name:muk_dms.cat_menu_muk_dms_documents
 msgid "Document Management"
-msgstr ""
+msgstr "Управління документами"
 
 #. module: muk_dms
 #: model:ir.ui.view,arch_db:muk_dms.view_dms_settings_form
 msgid "Document Setting"
-msgstr ""
+msgstr "Налаштування документа"
 
 #. module: muk_dms
 #: model:ir.actions.act_window,name:muk_dms.action_dms_settings
 #: model:ir.ui.menu,name:muk_dms.menu_dms_settings
-#: model:ir.ui.view,arch_db:muk_dms.res_config_settings_view_form
 #: model:ir.ui.view,arch_db:muk_dms.view_dms_settings_tree
 msgid "Document Settings"
-msgstr ""
+msgstr "Налаштування документів"
 
 #. module: muk_dms
 #: model:ir.actions.act_window,name:muk_dms.action_dms_directory_subdirectories
 msgid "Document Subdirectories"
-msgstr ""
+msgstr "Підкаталоги документів"
 
 #. module: muk_dms
 #: model:ir.actions.client,name:muk_dms.action_dms_documents
@@ -389,14 +444,14 @@ msgstr ""
 #: model:ir.ui.menu,name:muk_dms.main_menu_muk_dms
 #: model:ir.ui.menu,name:muk_dms.menu_dms_tree_view
 msgid "Documents"
-msgstr ""
+msgstr "Документи"
 
 #. module: muk_dms
 #. openerp-web
-#: code:addons/muk_dms/static/src/js/views/dms_views_documents.js:771
+#: code:addons/muk_dms/static/src/js/views/dms_views_documents.js:815
 #, python-format
 msgid "Download"
-msgstr ""
+msgstr "Завантажити"
 
 #. module: muk_dms
 #. openerp-web
@@ -404,77 +459,88 @@ msgstr ""
 #: code:addons/muk_dms/static/src/js/views/dms_views_file.js:91
 #, python-format
 msgid "Duplicate"
-msgstr ""
+msgstr "Дублювати"
 
 #. module: muk_dms
 #. openerp-web
-#: code:addons/muk_dms/static/src/js/views/dms_views_documents.js:641
+#: code:addons/muk_dms/static/src/js/views/dms_views_documents.js:685
 #: code:addons/muk_dms/static/src/js/views/dms_views_file.js:79
 #: code:addons/muk_dms/static/src/xml/dms_views.xml:41
 #, python-format
 msgid "Edit"
-msgstr ""
+msgstr "Редагувати"
 
 #. module: muk_dms
 #: model:ir.model.fields,field_description:muk_dms.field_muk_dms_access_editor
 #: model:ir.model.fields,field_description:muk_dms.field_muk_dms_directory_editor
 #: model:ir.model.fields,field_description:muk_dms.field_muk_dms_file_editor
 msgid "Editor"
-msgstr ""
+msgstr "Редактор"
 
 #. module: muk_dms
 #. openerp-web
 #: code:addons/muk_dms/static/src/xml/dms_views.xml:56
 #, python-format
 msgid "Enable Dialog Mode"
-msgstr ""
+msgstr "Вімкнути режим діалогу"
 
 #. module: muk_dms
 #: model:ir.model.fields,help:muk_dms.field_res_config_settings_module_muk_dms_file
 #: model:ir.ui.view,arch_db:muk_dms.res_config_settings_view_form
 msgid "Enables a new save option to store files into a file store."
-msgstr ""
+msgstr "Вмикає нову можливість збереження для зберігання файлів у файловому сховищі."
 
 #. module: muk_dms
-#: model:ir.model.fields,help:muk_dms.field_res_config_settings_module_muk_dms_connector
+#: model:ir.model.fields,help:muk_dms.field_res_config_settings_module_muk_dms_lobject
 #: model:ir.ui.view,arch_db:muk_dms.res_config_settings_view_form
-msgid "Enables the Document Rest API."
-msgstr ""
+msgid "Enables a new save option to store files into large objects."
+msgstr "Вмикає нову можливість збереження для зберігання файлів у великі об'єкти."
+
+#. module: muk_dms
+#: model:ir.model.fields,help:muk_dms.field_res_config_settings_module_muk_dms_finder
+#: model:ir.ui.view,arch_db:muk_dms.res_config_settings_view_form
+msgid "Enables the Document Finder."
+msgstr "Enables the Document Finder."
 
 #. module: muk_dms
 #: model:ir.model.fields,field_description:muk_dms.field_muk_dms_file_extension
 #: model:ir.ui.view,arch_db:muk_dms.search_dms_file
 msgid "Extension"
-msgstr ""
+msgstr "Розширеня"
 
 #. module: muk_dms
 #: model:ir.model.fields,field_description:muk_dms.field_res_config_settings_forbidden_extensions
 msgid "Extensions"
-msgstr ""
+msgstr "Розширення"
 
 #. module: muk_dms
 #. openerp-web
-#: code:addons/muk_dms/static/src/js/views/dms_views_documents.js:751
+#: code:addons/muk_dms/static/src/js/views/dms_views_documents.js:795
 #: model:ir.model,name:muk_dms.model_muk_dms_file
 #: model:ir.ui.view,arch_db:muk_dms.res_config_settings_view_form
 #, python-format
 msgid "File"
-msgstr ""
+msgstr "Файл"
 
 #. module: muk_dms
 #: model:ir.model.fields,field_description:muk_dms.field_res_config_settings_module_muk_dms_file
 msgid "File Store"
-msgstr ""
+msgstr "Сховище файлів"
+
+#. module: muk_dms
+#: selection:muk_dms.settings,save_type:0
+msgid "File System"
+msgstr "Файлова система"
 
 #. module: muk_dms
 #: model:ir.ui.view,arch_db:muk_dms.res_config_settings_view_form
 msgid "File Upload"
-msgstr ""
+msgstr "Вивантаження файлів"
 
 #. module: muk_dms
 #: model:ir.model.fields,field_description:muk_dms.field_muk_dms_file_name
 msgid "Filename"
-msgstr ""
+msgstr "Назва файлу"
 
 #. module: muk_dms
 #: model:ir.model.fields,field_description:muk_dms.field_muk_dms_directory_count_files
@@ -487,43 +553,55 @@ msgstr ""
 #: model:ir.ui.view,arch_db:muk_dms.view_dms_file_tree
 #: model:ir.ui.view,arch_db:muk_dms.view_dms_settings_form
 msgid "Files"
-msgstr ""
+msgstr "Файли"
 
 #. module: muk_dms
 #: model:ir.actions.act_window,help:muk_dms.action_dms_directory_files
 #: model:ir.actions.act_window,help:muk_dms.action_dms_file
 msgid "Files are used to save content directly in Odoo."
-msgstr ""
+msgstr "Файли використовуються для зберігання контенту безпосередньо в Odoo."
 
 #. module: muk_dms
 #: model:ir.model.fields,help:muk_dms.field_muk_dms_settings_top_files
 msgid "Files which parent aren't readable by the user."
-msgstr ""
+msgstr "Файли батьки яких не може читати користувач."
 
 #. module: muk_dms
 #. openerp-web
 #: code:addons/muk_dms/static/src/xml/dms_views.xml:100
 #, python-format
 msgid "Files:"
-msgstr ""
+msgstr "Файли:"
+
+#. module: muk_dms
+#: model:ir.model.fields,field_description:muk_dms.field_res_config_settings_module_muk_dms_finder
+msgid "Finder"
+msgstr "Finder"
 
 #. module: muk_dms
 #: model:ir.actions.act_window,name:muk_dms.action_dms_settings_general
 #: model:ir.ui.menu,name:muk_dms.menu_dms_settings_general
 msgid "General Settings"
-msgstr ""
+msgstr "Загальні налаштування"
 
 #. module: muk_dms
 #: model:ir.ui.view,arch_db:muk_dms.search_dms_file
 msgid "Group By"
-msgstr ""
+msgstr "Групувати за"
+
+#. module: muk_dms
+#: model:ir.model.fields,field_description:muk_dms.field_muk_dms_access_groups
+#: model:ir.model.fields,field_description:muk_dms.field_muk_dms_directory_groups
+#: model:ir.model.fields,field_description:muk_dms.field_muk_dms_file_groups
+msgid "Groups"
+msgstr "Групи"
 
 #. module: muk_dms
 #. openerp-web
 #: code:addons/muk_dms/static/src/xml/dms_views.xml:64
 #, python-format
 msgid "Hide Preview"
-msgstr ""
+msgstr "Сховати попередній перегляд"
 
 #. module: muk_dms
 #: model:ir.model.fields,field_description:muk_dms.field_muk_dms_access_id
@@ -534,45 +612,50 @@ msgstr ""
 #: model:ir.model.fields,field_description:muk_dms.field_muk_dms_lock_id
 #: model:ir.model.fields,field_description:muk_dms.field_muk_dms_settings_id
 msgid "ID"
-msgstr ""
+msgstr "ІД"
 
 #. module: muk_dms
 #: model:ir.model.fields,field_description:muk_dms.field_muk_dms_settings_index_files
 msgid "Index Files"
-msgstr ""
+msgstr "Індекс файлів"
 
 #. module: muk_dms
 #: model:ir.model.fields,field_description:muk_dms.field_muk_dms_file_index_content
 #: model:ir.ui.view,arch_db:muk_dms.view_dms_file_form
 msgid "Indexed Content"
-msgstr ""
+msgstr "Проіндексований контент"
 
 #. module: muk_dms
 #: model:ir.model.fields,help:muk_dms.field_muk_dms_settings_show_tree
 msgid "Indicates if directories inside of this settings object should be visible on document tree views."
-msgstr ""
+msgstr "Вказує, чи повинні бути видимі каталоги всередині цього об'єкта налаштувань у переглядах дерева документів."
 
 #. module: muk_dms
 #: model:ir.model.fields,help:muk_dms.field_muk_dms_settings_system_locks
 msgid "Indicates if files and directories should be automatically locked while system operations take place."
-msgstr ""
+msgstr "Вказує, чи слід автоматично блокувати файли та каталоги під час виконання системних операцій."
 
 #. module: muk_dms
 #: model:ir.model.fields,help:muk_dms.field_muk_dms_directory_is_root_directory
 msgid "Indicates if the directory is a root directory. A root directory has a settings object, while a directory with a set parent inherits the settings form its parent."
-msgstr ""
+msgstr "Вказує, чи каталог є кореневим каталогом. Кореневий каталог має об'єкт налаштувань, в той час як каталог з встановленим батьком успадковує налаштування які утворює його батько."
 
 #. module: muk_dms
 #: model:ir.model.fields,help:muk_dms.field_muk_dms_settings_index_files
 msgid "Indicates if the file data should be indexed to allow faster and better search results."
-msgstr ""
+msgstr "Вказує, чи потрібно індексувати дані файлу, щоб забезпечити швидший та кращий результат пошуку."
 
 #. module: muk_dms
 #: code:addons/muk_dms/models/dms_settings.py:139
 #: model:ir.ui.view,arch_db:muk_dms.view_dms_directory_form
 #, python-format
 msgid "Information"
-msgstr ""
+msgstr "Інформація"
+
+#. module: muk_dms
+#: model:ir.model.fields,field_description:muk_dms.field_res_config_settings_module_muk_dms_lobject
+msgid "Large Objects "
+msgstr "Великі Об'єкти "
 
 #. module: muk_dms
 #: model:ir.model.fields,field_description:muk_dms.field_muk_dms_access___last_update
@@ -583,7 +666,7 @@ msgstr ""
 #: model:ir.model.fields,field_description:muk_dms.field_muk_dms_lock___last_update
 #: model:ir.model.fields,field_description:muk_dms.field_muk_dms_settings___last_update
 msgid "Last Modified on"
-msgstr ""
+msgstr "Остання модифікація"
 
 #. module: muk_dms
 #: model:ir.model.fields,field_description:muk_dms.field_muk_dms_data_database_write_uid
@@ -592,7 +675,7 @@ msgstr ""
 #: model:ir.model.fields,field_description:muk_dms.field_muk_dms_lock_write_uid
 #: model:ir.model.fields,field_description:muk_dms.field_muk_dms_settings_write_uid
 msgid "Last Updated by"
-msgstr ""
+msgstr "Востаннє оновив"
 
 #. module: muk_dms
 #: model:ir.model.fields,field_description:muk_dms.field_muk_dms_data_database_write_date
@@ -601,127 +684,134 @@ msgstr ""
 #: model:ir.model.fields,field_description:muk_dms.field_muk_dms_lock_write_date
 #: model:ir.model.fields,field_description:muk_dms.field_muk_dms_settings_write_date
 msgid "Last Updated on"
-msgstr ""
+msgstr "Останнє оновлення"
 
 #. module: muk_dms
 #: model:ir.model.fields,field_description:muk_dms.field_muk_dms_directory_parent_left
 msgid "Left Parent"
-msgstr ""
+msgstr "Лівий батько"
 
 #. module: muk_dms
 #: model:ir.actions.act_window,name:muk_dms.action_dms_lock
 msgid "Lock"
-msgstr ""
+msgstr "Заблокувати"
 
 #. module: muk_dms
 #: model:ir.ui.view,arch_db:muk_dms.view_dms_file_form
 msgid "Lock (Edit)"
-msgstr ""
+msgstr "Заблокувати (Редагування)"
 
 #. module: muk_dms
 #: model:ir.model.fields,field_description:muk_dms.field_muk_dms_access_locked
 #: model:ir.model.fields,field_description:muk_dms.field_muk_dms_directory_locked
 #: model:ir.model.fields,field_description:muk_dms.field_muk_dms_file_locked
 msgid "Locked"
-msgstr ""
+msgstr "Заблоковано"
 
 #. module: muk_dms
 #: model:ir.model.fields,field_description:muk_dms.field_muk_dms_file_locked_by
 #: model:ir.model.fields,field_description:muk_dms.field_muk_dms_lock_locked_by
 msgid "Locked by"
-msgstr ""
+msgstr "Заблокував"
 
 #. module: muk_dms
 #. openerp-web
 #: code:addons/muk_dms/static/src/js/views/dms_views_file.js:75
 #, python-format
 msgid "Locked!"
-msgstr ""
+msgstr "Заблоковано!"
 
 #. module: muk_dms
 #: model:ir.ui.menu,name:muk_dms.cat_menu_muk_dms_locks
 #: model:ir.ui.menu,name:muk_dms.menu_dms_lock
 #: model:ir.ui.view,arch_db:muk_dms.view_dms_lock_tree
 msgid "Locks"
-msgstr ""
+msgstr "Блокування"
 
 #. module: muk_dms
 #: model:res.groups,name:muk_dms.group_dms_manager
 msgid "Manager"
-msgstr ""
+msgstr "Керівник"
 
 #. module: muk_dms
 #: model:ir.ui.view,arch_db:muk_dms.view_dms_directory_form
 #: model:ir.ui.view,arch_db:muk_dms.view_dms_file_form
 #: model:ir.ui.view,arch_db:muk_dms.view_dms_settings_form
 msgid "Meta Information"
-msgstr ""
+msgstr "Мета інформація"
 
 #. module: muk_dms
 #: model:ir.model,name:muk_dms.model_muk_dms_access
 msgid "MuK Documents Access"
-msgstr ""
+msgstr "MuK Документи Доступ"
 
 #. module: muk_dms
 #: model:ir.model,name:muk_dms.model_muk_dms_directory
 msgid "MuK Documents Directory"
-msgstr ""
+msgstr "MuK Документи Каталоги"
 
 #. module: muk_dms
 #: model:ir.model,name:muk_dms.model_muk_dms_settings
 msgid "MuK Documents Settings"
-msgstr ""
+msgstr "MuK Документи Налаштування"
 
 #. module: muk_dms
 #: model:ir.model.fields,field_description:muk_dms.field_muk_dms_directory_name
 #: model:ir.model.fields,field_description:muk_dms.field_muk_dms_lock_name
 #: model:ir.model.fields,field_description:muk_dms.field_muk_dms_settings_name
 msgid "Name"
-msgstr ""
+msgstr "Назва"
 
 #. module: muk_dms
 #. openerp-web
 #: code:addons/muk_dms/static/src/xml/dms_views.xml:88
 #, python-format
 msgid "Name:"
-msgstr ""
+msgstr "Назва:"
 
 #. module: muk_dms
 #. openerp-web
-#: code:addons/muk_dms/static/src/js/widgets/dms_widgets_directory.js:153
+#: code:addons/muk_dms/static/src/js/views/dms_views_documents.js:928
+#, python-format
+msgid "No directory has been selected!"
+msgstr "Не вибрано жодного каталогу!"
+
+#. module: muk_dms
+#. openerp-web
+#: code:addons/muk_dms/static/src/js/widgets/dms_widgets_directory.js:155
 #, python-format
 msgid "No results to show..."
-msgstr ""
+msgstr "Немає результатів для показу..."
 
 #. module: muk_dms
 #: model:ir.model.fields,field_description:muk_dms.field_muk_dms_lock_lock_ref
 msgid "Object Reference"
-msgstr ""
+msgstr "Посилання на об'єкт"
 
 #. module: muk_dms
 #. openerp-web
-#: code:addons/muk_dms/static/src/js/views/dms_views_documents.js:632
+#: code:addons/muk_dms/static/src/js/views/dms_views_documents.js:676
 #: code:addons/muk_dms/static/src/xml/dms_views.xml:38
 #, python-format
 msgid "Open"
-msgstr ""
+msgstr "Відкрити"
 
 #. module: muk_dms
 #: model:ir.model.fields,field_description:muk_dms.field_muk_dms_lock_operation
 msgid "Operation"
-msgstr ""
+msgstr "Операція"
 
 #. module: muk_dms
 #: model:ir.model.fields,field_description:muk_dms.field_muk_dms_directory_parent_directory
 msgid "Parent Directory"
-msgstr ""
+msgstr "Батьківський каталог"
 
 #. module: muk_dms
 #. openerp-web
-#: code:addons/muk_dms/static/src/js/views/dms_views_documents.js:721
+#: code:addons/muk_dms/static/src/js/views/dms_views_documents.js:765
 #, python-format
 msgid "Paste"
-msgstr ""
+msgstr "Вставити"
 
 #. module: muk_dms
 #: model:ir.model.fields,field_description:muk_dms.field_muk_dms_directory_path
@@ -729,81 +819,81 @@ msgstr ""
 #: model:ir.model.fields,field_description:muk_dms.field_muk_dms_file_path
 #: model:ir.model.fields,field_description:muk_dms.field_muk_dms_file_relational_path
 msgid "Path"
-msgstr ""
+msgstr "Шлях"
 
 #. module: muk_dms
 #. openerp-web
 #: code:addons/muk_dms/static/src/xml/dms_widgets.xml:25
 #, python-format
 msgid "Preview this file"
-msgstr ""
+msgstr "Попередній перегляд цього файлу"
 
 #. module: muk_dms
 #: model:ir.model.fields,field_description:muk_dms.field_muk_dms_access_perm_read
 #: model:ir.model.fields,field_description:muk_dms.field_muk_dms_directory_perm_read
 #: model:ir.model.fields,field_description:muk_dms.field_muk_dms_file_perm_read
 msgid "Read"
-msgstr ""
+msgstr "Читати"
 
 #. module: muk_dms
 #. openerp-web
 #: code:addons/muk_dms/static/src/xml/dms_views.xml:50
 #, python-format
 msgid "Refresh"
-msgstr ""
+msgstr "Оновити"
 
 #. module: muk_dms
 #. openerp-web
-#: code:addons/muk_dms/static/src/js/views/dms_views_documents.js:653
+#: code:addons/muk_dms/static/src/js/views/dms_views_documents.js:697
 #, python-format
 msgid "Rename"
-msgstr ""
-
-#. module: muk_dms
-#: model:ir.model.fields,field_description:muk_dms.field_res_config_settings_module_muk_dms_connector
-msgid "Rest API"
-msgstr ""
+msgstr "Перейменувати"
 
 #. module: muk_dms
 #: model:ir.model.fields,field_description:muk_dms.field_muk_dms_directory_parent_right
 msgid "Right Parent"
-msgstr ""
+msgstr "Правий батько"
 
 #. module: muk_dms
 #: model:ir.model.fields,field_description:muk_dms.field_muk_dms_settings_root_directories
 #: model:ir.ui.view,arch_db:muk_dms.search_dms_directory
 #: model:ir.ui.view,arch_db:muk_dms.view_dms_settings_form
 msgid "Root Directories"
-msgstr ""
+msgstr "Корневі каталоги"
 
 #. module: muk_dms
 #: model:ir.model.fields,field_description:muk_dms.field_muk_dms_directory_is_root_directory
 msgid "Root Directory"
-msgstr ""
+msgstr "Корневий каталог"
+
+#. module: muk_dms
+#: model:ir.ui.view,arch_db:muk_dms.res_config_settings_view_form
+msgid "Save Extensions"
+msgstr "Зберегти розширення"
 
 #. module: muk_dms
 #: model:ir.ui.view,arch_db:muk_dms.view_dms_settings_form
 msgid "Save Settings"
-msgstr ""
+msgstr "Зберегти настроювання"
 
 #. module: muk_dms
 #: model:ir.model.fields,field_description:muk_dms.field_muk_dms_settings_save_type
 msgid "Save Type"
-msgstr ""
+msgstr "Зберегти тип"
 
 #. module: muk_dms
 #. openerp-web
-#: code:addons/muk_dms/static/src/js/widgets/dms_widgets_directory.js:113
+#: code:addons/muk_dms/static/src/js/widgets/dms_widgets_directory.js:115
 #, python-format
 msgid "Search More..."
-msgstr ""
+msgstr "Знайти ще..."
 
 #. module: muk_dms
 #. openerp-web
 #: code:addons/muk_dms/static/src/xml/dms_views.xml:69
 #, python-format
 msgid "Search..."
-msgstr ""
+msgstr "Пошук..."
 
 #. module: muk_dms
 #: model:ir.model.fields,field_description:muk_dms.field_muk_dms_directory_settings
@@ -812,176 +902,187 @@ msgstr ""
 #: model:ir.ui.view,arch_db:muk_dms.view_dms_directory_form
 #: model:ir.ui.view,arch_db:muk_dms.view_dms_file_form
 msgid "Settings"
-msgstr ""
+msgstr "Налаштування"
 
 #. module: muk_dms
 #: model:ir.actions.act_window,help:muk_dms.action_dms_settings
 msgid "Settings are used to configure the Documents."
-msgstr ""
+msgstr "Налаштування використовуються для конфігурування документів."
 
 #. module: muk_dms
 #. openerp-web
 #: code:addons/muk_dms/static/src/xml/dms_views.xml:62
 #, python-format
 msgid "Show Preview"
-msgstr ""
+msgstr "Показати попередній перегляд"
 
 #. module: muk_dms
 #: model:ir.model.fields,field_description:muk_dms.field_muk_dms_settings_show_tree
 msgid "Show Structure"
-msgstr ""
+msgstr "Показати структуру"
 
 #. module: muk_dms
 #: model:ir.model.fields,field_description:muk_dms.field_muk_dms_directory_size
 #: model:ir.model.fields,field_description:muk_dms.field_muk_dms_file_size
 #: model:ir.model.fields,field_description:muk_dms.field_res_config_settings_max_upload_size
 msgid "Size"
-msgstr ""
+msgstr "Розмір"
 
 #. module: muk_dms
 #. openerp-web
 #: code:addons/muk_dms/static/src/xml/dms_views.xml:92
 #, python-format
 msgid "Size:"
-msgstr ""
+msgstr "Розмір:"
 
 #. module: muk_dms
 #: model:ir.model.fields,field_description:muk_dms.field_muk_dms_directory_child_directories
 #: model:ir.model.fields,field_description:muk_dms.field_muk_dms_directory_count_directories
 #: model:ir.ui.view,arch_db:muk_dms.view_dms_directory_form
 msgid "Subdirectories"
-msgstr ""
+msgstr "Підкаталоги"
 
 #. module: muk_dms
 #: model:ir.ui.menu,name:muk_dms.cat_menu_muk_dms_files
 msgid "System Data"
-msgstr ""
+msgstr "Системні дані"
 
 #. module: muk_dms
 #: model:ir.model.fields,field_description:muk_dms.field_muk_dms_settings_system_locks
 msgid "System Locks"
-msgstr ""
+msgstr "Системні блокування"
 
 #. module: muk_dms
 #: model:ir.ui.view,arch_db:muk_dms.view_dms_file_form
 msgid "Technical Information"
-msgstr ""
+msgstr "Технічна інформація"
 
 #. module: muk_dms
 #: code:addons/muk_dms/models/dms_file.py:286
 #, python-format
 msgid "The file has a forbidden file extension."
-msgstr ""
+msgstr "У файла заборонене розширення."
 
 #. module: muk_dms
 #: code:addons/muk_dms/models/dms_file.py:297
 #, python-format
 msgid "The maximum upload size is %s MB)."
-msgstr ""
+msgstr "Максимальний розмір завантаження %s МБ)."
 
 #. module: muk_dms
-#: code:addons/muk_dms/models/dms_base.py:245
-#: code:addons/muk_dms/models/dms_base.py:258
+#: code:addons/muk_dms/models/dms_base.py:267
 #, python-format
-msgid "The record is already locked by another user. (%s)"
-msgstr ""
+msgid "The record (%s[%s]) is locked by a user, so it can't be changes or deleted."
+msgstr "The record (%s[%s]) is locked by a user, so it can't be changes or deleted."
 
 #. module: muk_dms
-#: code:addons/muk_dms/models/dms_base.py:247
 #: code:addons/muk_dms/models/dms_base.py:260
 #, python-format
+msgid "The record (%s[%s]) is locked, so it can't be changes or deleted."
+msgstr "Запис (%s[%s]) заблоковано, тому його неможливо змінити або видалити."
+
+#. module: muk_dms
+#: code:addons/muk_dms/models/dms_base.py:202
+#, python-format
+msgid "The record (%s[%s]) is locked, so it can't be locked again."
+msgstr "Запис (%s[%s]) заблоковано, тому його неможливо заблокувати ще раз."
+
+#. module: muk_dms
+#: code:addons/muk_dms/models/dms_base.py:275
+#: code:addons/muk_dms/models/dms_base.py:288
+#, python-format
+msgid "The record is already locked by another user. (%s)"
+msgstr "Запис вже заблоковано іншим користувачем. (%s)"
+
+#. module: muk_dms
+#: code:addons/muk_dms/models/dms_base.py:277
+#: code:addons/muk_dms/models/dms_base.py:290
+#, python-format
 msgid "The record is already locked."
-msgstr ""
-
-#. module: muk_dms
-#: code:addons/muk_dms/models/dms_base.py:238
-#, python-format
-msgid "The record is locked by a user, so it can't be changes or deleted."
-msgstr ""
-
-#. module: muk_dms
-#: code:addons/muk_dms/models/dms_base.py:232
-#, python-format
-msgid "The record is locked, so it can't be changes or deleted."
-msgstr ""
-
-#. module: muk_dms
-#: code:addons/muk_dms/models/dms_base.py:184
-#, python-format
-msgid "The record is locked, so it can't be locked again."
-msgstr ""
+msgstr "Запис вже заблоковано."
 
 #. module: muk_dms
 #: model:ir.model.fields,help:muk_dms.field_muk_dms_settings_save_type
 msgid "The save type is used to determine how a file is saved to the system."
-msgstr ""
+msgstr "Тип збереження використовується для визначення способу збереження файлу в системі."
 
 #. module: muk_dms
-#: code:addons/muk_dms/models/dms_base.py:419
+#: code:addons/muk_dms/models/dms_base.py:459
 #, python-format
 msgid "This operation is forbidden!"
-msgstr ""
+msgstr "Ця операція заборонена!"
 
 #. module: muk_dms
 #: model:ir.model.fields,field_description:muk_dms.field_muk_dms_directory_thumbnail
 #: model:ir.model.fields,field_description:muk_dms.field_muk_dms_file_thumbnail
 msgid "Thumbnail"
-msgstr ""
+msgstr "Ескіз"
 
 #. module: muk_dms
 #. openerp-web
 #: code:addons/muk_dms/static/src/xml/dms_views.xml:71
 #, python-format
 msgid "Tip: It is also possible to serach by using regular expressions like ^[a-zA-Z]*.pdf"
-msgstr ""
+msgstr "Порада. Також можна шукати за допомогою регулярних виразів, як ^[a-zA-Z]*.pdf"
 
 #. module: muk_dms
 #: model:ir.model.fields,field_description:muk_dms.field_muk_dms_lock_token
 msgid "Token"
-msgstr ""
+msgstr "Токен"
 
 #. module: muk_dms
 #: model:ir.model.fields,field_description:muk_dms.field_muk_dms_settings_top_directories
 #: model:ir.model.fields,field_description:muk_dms.field_muk_dms_settings_top_files
 #: model:ir.ui.view,arch_db:muk_dms.view_dms_settings_form
 msgid "Top Directories"
-msgstr ""
+msgstr "Верхні каталоги"
+
+#. module: muk_dms
+#: model:ir.ui.view,arch_db:muk_dms.view_dms_settings_form
+msgid "Top Directories & Files"
+msgstr "Верхні каталоги та файли"
 
 #. module: muk_dms
 #: model:ir.ui.view,arch_db:muk_dms.view_dms_settings_form
 msgid "Top Files"
-msgstr ""
+msgstr "Верхні файли"
 
 #. module: muk_dms
 #: model:ir.model.fields,field_description:muk_dms.field_muk_dms_file_mimetype
 msgid "Type"
-msgstr ""
+msgstr "Тип"
 
 #. module: muk_dms
 #: model:ir.ui.view,arch_db:muk_dms.view_dms_file_form
 msgid "Unlock (Release)"
-msgstr ""
+msgstr "Разблокувати (Відпустити)"
 
 #. module: muk_dms
 #: selection:muk_dms.lock,locked_by_ref:0
 #: model:res.groups,name:muk_dms.group_dms_user
 msgid "User"
-msgstr ""
+msgstr "Користувач"
 
 #. module: muk_dms
 #: model:ir.model.fields,field_description:muk_dms.field_muk_dms_lock_locked_by_ref
 msgid "User Reference"
-msgstr ""
+msgstr "Посилання користувача"
 
 #. module: muk_dms
 #: model:ir.model.fields,field_description:muk_dms.field_muk_dms_access_perm_write
 #: model:ir.model.fields,field_description:muk_dms.field_muk_dms_directory_perm_write
 #: model:ir.model.fields,field_description:muk_dms.field_muk_dms_file_perm_write
 msgid "Write"
-msgstr ""
+msgstr "Писати"
+
+#. module: muk_dms
+#. openerp-web
+#: code:addons/muk_dms/static/src/js/views/dms_views_documents.js:924
+#, python-format
+msgid "Your browser doesn't support Drag and Drop!"
+msgstr "Ваш браузер не підтримує перетягування!"
 
 #. module: muk_dms
 #: model:ir.model,name:muk_dms.model_res_config_settings
 msgid "res.config.settings"
-msgstr ""
-
+msgstr "res.config.settings"
