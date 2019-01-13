@@ -17,7 +17,7 @@
 #
 ###################################################################################
 
-from . import dms_case
-from . import test_dms_settings
-from . import test_dms_directory
-from . import test_dms_file
+from . import common
+from . import test_storage
+from . import test_directory
+from . import test_file

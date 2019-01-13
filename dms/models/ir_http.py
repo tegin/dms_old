@@ -33,32 +33,23 @@ class IrHttp(models.AbstractModel):
     _inherit = 'ir.http'
     
     @classmethod
-    def binary_content(cls, xmlid=None, model='ir.attachment', id=None, field='datas',
-                       unique=False, filename=None, filename_field='datas_fname', download=False,
-                       mimetype=None, default_mimetype='application/octet-stream',
-                       access_token=None, env=None):
+    def binary_content(cls, xmlid=None, model='ir.attachment', id=None, field='datas', unique=False, filename=None,
+        filename_field='datas_fname', download=False, mimetype=None, default_mimetype='application/octet-stream',
+        access_token=None, related_id=None, access_mode=None, env=None):
         res_status, res_headers, res_content = super(IrHttp, cls).binary_content(
-            xmlid=xmlid, model=model, id=id, field=field, unique=unique, filename=filename,
-            filename_field=filename_field, download=download, mimetype=mimetype,
+            xmlid=xmlid, model=model, id=id, field=field, unique=unique, filename=filename, mimetype=mimetype,
+            filename_field=filename_field, download=download, access_mode=access_mode, related_id=related_id,
             default_mimetype=default_mimetype, access_token=access_token, env=env)
+        env = env or request.env
         if model == "muk_dms.file" and field != 'content':
+            obj = cls._xmlid_to_obj(env, xmlid) if xmlid else env[model].browse(int(id))
+            filename = obj[filename_field] if not filename and filename_field in obj else filename
+            mimetype = filename and mimetypes.guess_type(filename)[0]
+            if not mimetype:
+                mimetype = guess_mimetype(base64.b64decode(res_content), default=default_mimetype)
             headers = []
-            env = env or request.env
             for header in res_headers:
                 if header[0] == 'Content-Type':
-                    if not mimetype:
-                        if filename:
-                            mimetype = mimetypes.guess_type(filename)[0]
-                        if not mimetype and getattr(env[model]._fields[field], 'attachment', False):
-                            attach_mimetype = env['ir.attachment'].search_read(
-                                domain=[
-                                    ('res_model', '=', model),
-                                    ('res_id', '=', id),
-                                    ('res_field', '=', field)],
-                                fields=['mimetype'], limit=1)
-                            mimetype = attach_mimetype and attach_mimetype[0]['mimetype']
-                        if not mimetype:
-                            mimetype = guess_mimetype(base64.b64decode(res_content), default=default_mimetype)
                     headers.append(('Content-Type', mimetype))
                 else:
                     headers.append(header)

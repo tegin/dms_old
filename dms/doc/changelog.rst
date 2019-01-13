@@ -1,3 +1,13 @@
+`2.3.0`
+-------
+
+- Restructuring
+
+`2.2.0`
+-------
+
+- Moved document view to a separate module
+
 `2.1.0`
 -------
 

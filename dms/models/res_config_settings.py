@@ -31,13 +31,29 @@ class ResConfigSettings(models.TransientModel):
         string="Binary Widget Support",
         help="Allows the user to use DMS documents as input for any binary field.")
     
+    module_muk_archive = fields.Boolean(
+        string="Download Directories",
+        help="Allows to download directories as a archive file.")
+    
+    module_muk_dms_thumbnails = fields.Boolean(
+        string="Automatic Thumbnails",
+        help="Allows the creation of thumbnails for files.")
+    
+    module_muk_dms_export = fields.Boolean(
+        string="Export Files",
+        help="Allows the conversion of existing files.")
+    
     module_muk_dms_attachment = fields.Boolean(
         string="Attachment Storage Location",
         help="Allows attachments to be stored inside of MuK Documents.")
-    
+
     module_muk_dms_attachment_rules = fields.Boolean(
         string="Attachment Storage Rules",
         help="Allows attachments to be automatically placed in the right directory.")
+    
+    module_muk_dms_attachment_automation = fields.Boolean(
+        string="Attachment Rule Automation",
+        help="Allows you to create rule templates to create attachment rules.")
     
     module_muk_dms_attachment_wizard = fields.Boolean(
         string="Attachment Wizard",
@@ -55,20 +71,20 @@ class ResConfigSettings(models.TransientModel):
         string="Large Objects ",
         help="Enables a new save option to store files into large objects.")
     
-    max_upload_size = fields.Integer(
+    documents_binary_max_size = fields.Integer(
         string="Size",
         help="Defines the maximum upload size in MB. Default (25MB)")
     
-    forbidden_extensions = fields.Char(
+    documents_forbidden_extensions = fields.Char(
         string="Extensions",
-        help="Defines a list of forbidden file extensions. (Example: '.exe,.msi')")
+        help="Defines a list of forbidden file extensions. (Example: 'exe,msi')")
     
     @api.multi
     def set_values(self):
         res = super(ResConfigSettings, self).set_values()
         param = self.env['ir.config_parameter'].sudo()
-        param.set_param('muk_dms.max_upload_size', self.max_upload_size)
-        param.set_param('muk_dms.forbidden_extensions', self.forbidden_extensions)
+        param.set_param('muk_dms.max_upload_size', self.documents_binary_max_size)
+        param.set_param('muk_dms.forbidden_extensions', self.documents_forbidden_extensions)
         return res
 
     @api.model
@@ -76,7 +92,7 @@ class ResConfigSettings(models.TransientModel):
         res = super(ResConfigSettings, self).get_values()
         params = self.env['ir.config_parameter'].sudo()
         res.update(
-            max_upload_size=int(params.get_param('muk_dms.max_upload_size', default=25)),
-            forbidden_extensions=params.get_param('muk_dms.forbidden_extensions', default=""),
+            documents_binary_max_size=int(params.get_param('muk_web_utils.binary_max_size', default=25)),
+            documents_forbidden_extensions=params.get_param('muk_dms.forbidden_extensions', default=""),
         )
         return res
