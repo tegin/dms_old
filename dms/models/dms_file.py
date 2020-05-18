@@ -1,515 +1,633 @@
-###################################################################################
-# 
-#    Copyright (C) 2017 MuK IT GmbH
-#
-#    This program is free software: you can redistribute it and/or modify
-#    it under the terms of the GNU Affero General Public License as
-#    published by the Free Software Foundation, either version 3 of the
-#    License, or (at your option) any later version.
-#
-#    This program is distributed in the hope that it will be useful,
-#    but WITHOUT ANY WARRANTY; without even the implied warranty of
-#    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-#    GNU Affero General Public License for more details.
-#
-#    You should have received a copy of the GNU Affero General Public License
-#    along with this program.  If not, see <http://www.gnu.org/licenses/>.
-#
-###################################################################################
+# Copyright 2020 Antoni Romera
+# Copyright 2017-2019 MuK IT GmbH
+# License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
 
-import os
-import json
 import base64
+import functools
+import hashlib
+import io
+import itertools
+import json
 import logging
 import mimetypes
-import itertools
+import operator
+import os
+import tempfile
+from collections import defaultdict
 
-from odoo import _
-from odoo import models, api, fields, tools
+from odoo import SUPERUSER_ID, _, api, fields, models, tools
+from odoo.exceptions import AccessError, ValidationError
+from odoo.osv import expression
 from odoo.tools.mimetypes import guess_mimetype
-from odoo.exceptions import ValidationError
+
+from odoo.addons.dms.tools import NoSecurityUid
+from odoo.addons.dms.tools import file
 
 _logger = logging.getLogger(__name__)
 
-_img_path = os.path.abspath(os.path.join(os.path.dirname(os.path.dirname(__file__)), 'static/src/img'))
 
 class File(models.Model):
-    
-    _name = 'muk_dms.file'
+
+    _name = "dms.file"
     _description = "File"
+
     _inherit = [
-        'muk_dms.locking',
-        'muk_dms.access',
-        'mail.thread',
-        'mail.activity.mixin']
-    
-    #----------------------------------------------------------
+        "dms.security.mixins",
+        "dms.mixins.thumbnail",
+    ]
+
+    _order = "name asc"
+
+    # ----------------------------------------------------------
     # Database
-    #----------------------------------------------------------
-    
-    name = fields.Char(
-        string="Filename", 
-        required=True,
-        index=True)
-    
+    # ----------------------------------------------------------
+
+    name = fields.Char(string="Filename", required=True, index=True)
+
     active = fields.Boolean(
-        string="Archived", 
+        string="Archived",
         default=True,
-        help="If a file is set to archived, it is not displayed, but still exists.")
-    
-    is_top_file = fields.Boolean(
-        string="Top Directory", 
-        compute='_compute_is_top_file',
-        search='_search_is_top_file')
-    
-    settings = fields.Many2one(
-        comodel_name='muk_dms.settings', 
-        string="Settings",
-        store=True,
-        auto_join=True,
-        ondelete='restrict', 
-        compute='_compute_settings')
-    
-    show_tree = fields.Boolean(
-        string="Show Structure", 
-        related="settings.show_tree",
-        readonly=True)
-    
-    color = fields.Integer(
-        string="Color")
-    
-    tags = fields.Many2many(
-        comodel_name='muk_dms.tag',
-        relation='muk_dms_file_tag_rel', 
-        column1='fid',
-        column2='tid',
-        string='Tags')
-    
-    category = fields.Many2one(
-        string="Category",
-        comodel_name='muk_dms.category', 
-        related="directory.category",
-        readonly=True,
-        store=True)
-    
-    content = fields.Binary(
-        string='Content', 
-        required=True,
-        compute='_compute_content',
-        inverse='_inverse_content')
-    
-    reference = fields.Reference(
-        selection=[('muk_dms.data', _('Data'))],
-        string="Data Reference", 
-        readonly=True)
-    
-    directory = fields.Many2one(
-        comodel_name='muk_dms.directory', 
+        help="If a file is set to archived, it is not displayed, but still exists.",
+    )
+
+    directory_id = fields.Many2one(
+        comodel_name="dms.directory",
         string="Directory",
         domain="[('permission_create', '=', True)]",
-        ondelete='restrict',  
+        context="{'dms_directory_show_path': True}",
+        ondelete="restrict",
         auto_join=True,
-        required=True)
-    
-    extension = fields.Char(
-        string='Extension',
-        compute='_compute_extension',
+        required=True,
+        index=True,
+        oldname="directory"
+    )
+
+    storage_id = fields.Many2one(
+        related="directory_id.storage",
+        comodel_name="dms.storage",
+        string="Storage",
+        auto_join=True,
         readonly=True,
-        store=True)
-    
-    mimetype = fields.Char(
-        string='Type',
-        compute='_compute_mimetype',
+        store=True,
+        oldname="storage"
+    )
+
+    is_hidden = fields.Boolean(
+        string="Storage is Hidden", related="storage.is_hidden", readonly=True
+    )
+
+    company_id = fields.Many2one(
+        related="storage.company",
+        comodel_name="res.company",
+        string="Company",
         readonly=True,
-        store=True)
-    
-    size = fields.Integer(
-        string='Size', 
-        readonly=True)
-    
-    path = fields.Char(
-        string="Path",
         store=True,
         index=True,
-        readonly=True,
-        compute='_compute_path')
-    
-    relational_path = fields.Text(
-        string="Path",
-        store=True,
-        readonly=True,
-        compute='_compute_relational_path')
-    
-    custom_thumbnail = fields.Binary(
-        string="Custom Thumbnail")
-    
-    custom_thumbnail_medium = fields.Binary(
-        string="Medium Custom Thumbnail")
-    
-    custom_thumbnail_small = fields.Binary(
-        string="Small Custom Thumbnail")
-    
-    thumbnail = fields.Binary(
-        compute='_compute_thumbnail',
-        string="Thumbnail")
+        oldname="company"
+    )
 
-    thumbnail_medium = fields.Binary(
-        compute='_compute_thumbnail_medium',
-        string="Medium Thumbnail")
-    
-    thumbnail_small = fields.Binary(
-        compute='_compute_thumbnail_small',
-        string="Small Thumbnail")
+    path_names = fields.Char(
+        compute="_compute_path", string="Path Names", readonly=True, store=False
+    )
 
-    #----------------------------------------------------------
-    # Functions
-    #----------------------------------------------------------
-    
-    @api.multi
-    def notify_change(self, values, *largs, **kwargs):
-        super(File, self).notify_change(values, *largs, **kwargs)
-        if "save_type" in values:
-            self._update_reference_type()
-            
-    @api.multi  
-    def trigger_computation_up(self, fields, *largs, **kwargs):
-        if("no_trigger_computation_up" not in self.env.context):
-            self.mapped('directory').suspend_security().with_context(is_parent=True).trigger_computation(fields)
-        
-    @api.multi
-    def trigger_computation(self, fields, *largs, **kwargs):        
-        super(File, self).trigger_computation(fields, refresh=True, *largs, **kwargs)
+    path_json = fields.Text(
+        compute="_compute_path", string="Path Json", readonly=True, store=False
+    )
+
+    color = fields.Integer(string="Color", default=0)
+
+    category_id = fields.Many2one(
+        comodel_name="dms.category",
+        context="{'dms_category_show_path': True}",
+        string="Category",
+        oldname="category"
+    )
+
+    tag_ids = fields.Many2many(
+        comodel_name="dms.tag",
+        relation="dms_file_tag_rel",
+        column1="fid",
+        column2="tid",
+        string="Tags",
+        oldname="tags"
+    )
+
+    content = fields.Binary(
+        compute="_compute_content",
+        inverse="_inverse_content",
+        string="Content",
+        attachment=False,
+        prefetch=False,
+        required=True,
+        store=False,
+    )
+
+    extension = fields.Char(
+        compute="_compute_extension", string="Extension", readonly=True, store=True
+    )
+
+    mimetype = fields.Char(
+        compute="_compute_mimetype", string="Type", readonly=True, store=True
+    )
+
+    size = fields.Integer(string="Size", readonly=True)
+
+    checksum = fields.Char(string="Checksum/SHA1", readonly=True, size=40, index=True)
+
+    content_binary = fields.Binary(
+        string="Content Binary", attachment=False, prefetch=False, invisible=True
+    )
+
+    save_type = fields.Char(
+        compute="_compute_save_type",
+        string="Current Save Type",
+        invisible=True,
+        prefetch=False,
+    )
+
+    migration = fields.Char(
+        compute="_compute_migration",
+        string="Migration Status",
+        readonly=True,
+        prefetch=False,
+    )
+
+    # ----------------------------------------------------------
+    # Helper
+    # ----------------------------------------------------------
+
+    @api.model
+    def _get_checksum(self, binary):
+        return hashlib.sha1(binary or b"").hexdigest()
+
+    @api.model
+    def _get_content_inital_vals(self):
+        return {"content_binary": False}
+
+    @api.model
+    def _update_content_vals(self, file, vals, binary):
+        vals.update(
+            {
+                "checksum": self._get_checksum(binary),
+                "size": binary and len(binary) or 0,
+            }
+        )
+        return vals
+
+    @api.model
+    def _get_binary_max_size(self):
+        get_param = self.env["ir.config_parameter"].sudo().get_param
+        return int(get_param("dms_web_utils.binary_max_size", default=25))
+
+    @api.model
+    def _get_forbidden_extensions(self):
+        get_param = self.env["ir.config_parameter"].sudo().get_param
+        extensions = get_param("dms.forbidden_extensions", default="")
+        return [extension.strip() for extension in extensions.split(",")]
+
+
+    def _get_thumbnail_placeholder_name(self):
+        return self.extension and "file_%s.svg" % self.extension or ""
+
+    # ----------------------------------------------------------
+    # Actions
+    # ----------------------------------------------------------
+
+
+    def action_migrate(self, logging=True):
+        record_count = len(self)
+        for index, file in enumerate(self):
+            if logging:
+                info = (index + 1, record_count, file.migration)
+                _logger.info(_("Migrate File %s of %s [ %s ]") % info)
+            file.with_context(migration=True).write(
+                {"content": file.with_context({}).content}
+            )
+
+
+    def action_save_onboarding_file_step(self):
+        self.env.user.company_id.set_onboarding_step_done(
+            "documents_onboarding_file_state"
+        )
+
+    # ----------------------------------------------------------
+    # SearchPanel
+    # ----------------------------------------------------------
+
+    @api.model
+    def _search_panel_directory(self, **kwargs):
+        search_domain = (kwargs.get("search_domain", []),)
+        category_domain = kwargs.get("category_domain", [])
+        if category_domain and len(category_domain):
+            return "=", category_domain[0][2]
+        if search_domain and len(search_domain):
+            for domain in search_domain[0]:
+                if domain[0] == "directory":
+                    return domain[1], domain[2]
+        return None, None
+
+    @api.model
+    def _search_panel_domain(self, field, operator, directory_id, comodel_domain=[]):
+        files_ids = self.search([("directory", operator, directory_id)]).ids
+        return expression.AND([comodel_domain, [(field, "in", files_ids)]])
+
+    @api.model
+    def search_panel_select_range(self, field_name, **kwargs):
+        operator, directory_id = self._search_panel_directory(**kwargs)
+        if directory_id and field_name == "directory":
+            domain = [("parent_directory", operator, directory_id)]
+            values = self.env["dms.directory"].search_read(
+                domain, ["display_name", "parent_directory"]
+            )
+            return {
+                "parent_field": "parent_directory",
+                "values": values if len(values) > 1 else [],
+            }
+        return super(File, self).search_panel_select_range(field_name, **kwargs)
+
+    @api.model
+    def search_panel_select_multi_range(self, field_name, **kwargs):
+        operator, directory_id = self._search_panel_directory(**kwargs)
+        if field_name == "tags":
+            sql_query = """
+                SELECT t.name AS name, t.id AS id, c.name AS group_name,
+                    c.id AS group_id, COUNT(r.fid) AS count
+                FROM dms_tag t
+                JOIN dms_category c ON t.category = c.id
+                LEFT JOIN dms_file_tag_rel r ON t.id = r.tid
+                {directory_where_clause}
+                GROUP BY c.name, c.id, t.name, t.id
+                ORDER BY c.name, c.id, t.name, t.id;
+            """
+            where_clause = ""
+            if directory_id:
+                directory_where_clause = "WHERE r.fid = ANY (VALUES {ids})"
+                file_ids = self.search([("directory", operator, directory_id)]).ids
+                where_clause = (
+                    ""
+                    if not file_ids
+                    else directory_where_clause.format(
+                        ids=", ".join(map(lambda id: "(%s)" % id, file_ids))
+                    )
+                )
+            self.env.cr.execute(
+                sql_query.format(directory_where_clause=where_clause), []
+            )
+            return self.env.cr.dictfetchall()
+        if directory_id and field_name in ["directory", "category"]:
+            comodel_domain = kwargs.pop("comodel_domain", [])
+            directory_comodel_domain = self._search_panel_domain(
+                "files", operator, directory_id, comodel_domain
+            )
+            return super(File, self).search_panel_select_multi_range(
+                field_name, comodel_domain=directory_comodel_domain, **kwargs
+            )
+        return super(File, self).search_panel_select_multi_range(field_name, **kwargs)
+
+    # ----------------------------------------------------------
+    # Read
+    # ----------------------------------------------------------
+
+    @api.depends("name", "directory_id", "directory_id.parent_path")
+    def _compute_path(self):
+        records_with_directory = self - self.filtered(lambda rec: not rec.directory)
+        if records_with_directory:
+            paths = [
+                list(map(int, rec.directory.parent_path.split("/")[:-1]))
+                for rec in records_with_directory
+            ]
+            model = self.env["dms.directory"].with_context(
+                dms_directory_show_path=False
+            )
+            directories = model.browse(set(functools.reduce(operator.concat, paths)))
+            data = dict(directories._filter_access("read").name_get())
+            for record in self:
+                path_names = []
+                path_json = []
+                for id in reversed(
+                    list(map(int, record.directory.parent_path.split("/")[:-1]))
+                ):
+                    if id not in data:
+                        break
+                    path_names.append(data[id])
+                    path_json.append(
+                        {"model": model._name, "name": data[id], "id": id,}
+                    )
+                path_names.reverse()
+                path_json.reverse()
+                name = record.name_get()
+                path_names.append(name[0][1])
+                path_json.append(
+                    {
+                        "model": record._name,
+                        "name": name[0][1],
+                        "id": isinstance(record.id, int) and record.id or 0,
+                    }
+                )
+                record.update(
+                    {
+                        "path_names": "/".join(path_names),
+                        "path_json": json.dumps(path_json),
+                    }
+                )
+
+    @api.depends("name")
+    def _compute_extension(self):
         for record in self:
-            values = {}
-            if "settings" in fields:
-                values.update(record._compute_settings(write=False)) 
-            if "path" in fields:
-                values.update(record._compute_path(write=False)) 
-                values.update(record._compute_relational_path(write=False)) 
-            if "extension" in fields:
-                values.update(record._compute_extension(write=False)) 
-            if "mimetype" in fields:
-                values.update(record._compute_mimetype(write=False)) 
-            if values:
-                record.write(values)    
-                if "settings" in fields:
-                    record.notify_change({'save_type': record.settings.save_type})
-    
-    @api.model
-    def max_upload_size(self):
-        params = self.env['ir.config_parameter'].sudo()
-        return int(params.get_param('muk_dms.max_upload_size', default=25))
-    
-    @api.model
-    def forbidden_extensions(self):
-        params = self.env['ir.config_parameter'].sudo()
-        forbidden_extensions = params.get_param('muk_dms.forbidden_extensions', default="")
-        return [x.strip() for x in forbidden_extensions.split(',')]
-    
-    #----------------------------------------------------------
-    # Search
-    #----------------------------------------------------------
-    
-    @api.model
-    def _search_permission_create(self, operator, operand):
-        res = super(File, self)._search_permission_create(operator, operand)
-        records = self.browse(res[0][2]).filtered(lambda r: r.directory.check_access('create'))
-        if operator == '=' and operand:
-            return [('id', 'in', records.mapped('id'))]
-        return [('id', 'not in', records.mapped('id'))]
-    
-    @api.model
-    def _search_is_top_file(self, operator, operand):
-        files = self.search([]).filtered(lambda f: not f.directory.check_access('read'))
-        if operator == '=' and operand:
-            return [('id', 'in', files.mapped('id'))]
-        return [('id', 'not in', files.mapped('id'))]
-    
-    #----------------------------------------------------------
-    # Read, View 
-    #----------------------------------------------------------
-        
-    @api.multi
-    def _compute_settings(self, write=True):
-        if write:
-            for record in self:
-                record.settings = record.directory.settings   
-        else:
-            self.ensure_one()
-            return {'settings': self.directory.settings.id}         
-    
-    @api.multi    
-    def _compute_extension(self, write=True):
-        if write:
-            for record in self:
-                record.extension = os.path.splitext(record.name)[1]
-        else:
-            self.ensure_one()
-            return {'extension': os.path.splitext(self.name)[1]}
-    
-    @api.multi            
-    def _compute_mimetype(self, write=True):
-        def get_mimetype(record):
-            mimetype = mimetypes.guess_type(record.name)[0]
-            if (not mimetype or mimetype == 'application/octet-stream') and record.content:
-                mimetype = guess_mimetype(base64.b64decode(record.content))
-            return mimetype or 'application/octet-stream'
-        if write:
-            for record in self:
-                record.mimetype = get_mimetype(record)
-        else:
-            self.ensure_one()
-            return {'mimetype': get_mimetype(self)}   
-    
-    @api.multi      
-    def _compute_path(self, write=True):
-        if write:
-            for record in self:
-                record.path = "%s%s" % (record.directory.path, record.name)   
-        else:
-            self.ensure_one()
-            return {'path': "%s%s" % (self.directory.path, self.name)}   
-    
-    @api.multi
-    def _compute_relational_path(self, write=True):
-        def get_relational_path(record):
-            path = json.loads(record.directory.relational_path)
-            path.append({
-                'model': record._name,
-                'id': record.id,
-                'name': record.name})
-            return json.dumps(path)  
-        if write:
-            for record in self:
-                record.relational_path = get_relational_path(record)
-        else:
-            self.ensure_one()
-            return {'relational_path': get_relational_path(self)}   
-    
-    @api.multi      
+            record.extension = file.guess_extension(record.name)
+
+    @api.depends("name")
+    def _compute_mimetype(self):
+        for record in self:
+            mimetype = record.name and mimetypes.guess_type(record.name)[0]
+            if not mimetype:
+                binary = base64.b64decode(record.with_context({}).content or "")
+                mimetype = guess_mimetype(binary, default="application/octet-stream")
+            record.mimetype = mimetype
+
+    @api.depends("content_binary")
     def _compute_content(self):
         for record in self:
-            record.content = record._get_content()
-    
-    @api.multi
-    def _compute_permissions(self):
-        super(File, self)._compute_permissions()
-        for record in self:
-            record.permission_create = record.permission_create and record.directory.check_access('create')
+            record.content = record.content_binary
 
-    @api.depends('directory')
-    def _compute_is_top_file(self):
+    @api.depends("content_binary")
+    def _compute_save_type(self):
         for record in self:
-            record.is_top_file = record.directory.check_access('read') 
-            
-    @api.depends('custom_thumbnail')
-    def _compute_thumbnail(self):
+            record.save_type = "database"
+
+    @api.depends("storage_id", "storage_id.save_type")
+    def _compute_migration(self):
+        storage_model = self.env["dms.storage"]
+        save_field = storage_model._fields["save_type"]
+        values = save_field._description_selection(self.env)
+        selection = {value[0]: value[1] for value in values}
         for record in self:
-            if record.custom_thumbnail:
-                record.thumbnail = record.with_context({}).custom_thumbnail        
+            storage_type = record.storage.save_type
+            if storage_type != record.save_type:
+                storage_label = selection.get(storage_type)
+                file_label = selection.get(record.save_type)
+                record.migration = "{} > {}".format(file_label, storage_label)
             else:
-                extension = record.extension and record.extension.strip(".") or ""
-                path = os.path.join(_img_path, "file_%s.png" % extension)
-                if not os.path.isfile(path):
-                    path = os.path.join(_img_path, "file_unkown.png")
-                with open(path, "rb") as image_file:
-                    record.thumbnail = base64.b64encode(image_file.read())
-                    
-    @api.depends('custom_thumbnail_medium')
-    def _compute_thumbnail_medium(self):
-        for record in self:
-            if record.custom_thumbnail_medium:
-                record.thumbnail_medium = record.with_context({}).custom_thumbnail_medium        
-            else:
-                extension = record.extension and record.extension.strip(".") or ""
-                path = os.path.join(_img_path, "file_%s_128x128.png" % extension)
-                if not os.path.isfile(path):
-                    path = os.path.join(_img_path, "file_unkown_128x128.png")
-                with open(path, "rb") as image_file:
-                    record.thumbnail_medium = base64.b64encode(image_file.read())
-    
-    @api.depends('custom_thumbnail_small')
-    def _compute_thumbnail_small(self):
-        for record in self:
-            if record.custom_thumbnail_small:
-                record.thumbnail_small = record.with_context({}).custom_thumbnail_small        
-            else:
-                extension = record.extension and record.extension.strip(".") or ""
-                path = os.path.join(_img_path, "file_%s_64x64.png" % extension)
-                if not os.path.isfile(path):
-                    path = os.path.join(_img_path, "file_unkown_64x64.png")
-                with open(path, "rb") as image_file:
-                    record.thumbnail_small = base64.b64encode(image_file.read())
-        
-    #----------------------------------------------------------
-    # Create, Update, Delete
-    #----------------------------------------------------------
-    
-    @api.constrains('name')
+                record.migration = selection.get(storage_type)
+
+
+    def read(self, fields=None, load="_classic_read"):
+        self.check_directory_access("read", {}, True)
+        return super(File, self).read(fields, load=load)
+
+    # ----------------------------------------------------------
+    # View
+    # ----------------------------------------------------------
+
+    @api.onchange("category_id")
+    def _change_category(self):
+        res = {"domain": {"tags": [("category", "=", False)]}}
+        if self.category:
+            res.update(
+                {
+                    "domain": {
+                        "tags": [
+                            "|",
+                            ("category", "=", False),
+                            ("category", "child_of", self.category.id),
+                        ]
+                    }
+                }
+            )
+        tags = self.tags.filtered(
+            lambda rec: not rec.category or rec.category == self.category
+        )
+        self.tags = tags
+        return res
+
+    # ----------------------------------------------------------
+    # Security
+    # ----------------------------------------------------------
+
+    @api.model
+    def _get_directories_from_database(self, file_ids):
+        if not file_ids:
+            return self.env["dms.directory"]
+        sql_query = """
+            SELECT directory
+            FROM dms_file
+            WHERE id = ANY (VALUES {ids});
+        """.format(
+            ids=", ".join(map(lambda id: "(%s)" % id, file_ids))
+        )
+        self.env.cr.execute(sql_query, [])
+        result = {val[0] for val in self.env.cr.fetchall()}
+        return self.env["dms.directory"].browse(result)
+
+    @api.model
+    def _read_group_process_groupby(self, gb, query):
+        if self.env.user.id == SUPERUSER_ID or isinstance(self.env.uid, NoSecurityUid):
+            return super(File, self)._read_group_process_groupby(gb, query)
+        directories = (
+            self.env["dms.directory"].with_context(prefetch_fields=False).search([])
+        )
+        if directories:
+            where_clause = '"{table}"."{field}" = ANY (VALUES {ids})'.format(
+                table=self._table,
+                field="directory",
+                ids=", ".join(map(lambda id: "(%s)" % id, directories.ids)),
+            )
+            query.where_clause += [where_clause]
+        else:
+            query.where_clause += ["0=1"]
+        return super(File, self)._read_group_process_groupby(gb, query)
+
+    @api.model
+    def _search(
+        self,
+        args,
+        offset=0,
+        limit=None,
+        order=None,
+        count=False,
+        access_rights_uid=None,
+    ):
+        result = super(File, self)._search(
+            args, offset, limit, order, False, access_rights_uid
+        )
+        if self.env.user.id == SUPERUSER_ID or isinstance(self.env.uid, NoSecurityUid):
+            return len(result) if count else result
+        if not result:
+            return 0 if count else []
+        file_ids = set(result)
+        directories = self._get_directories_from_database(result)
+        for directory in directories - directories._filter_access("read"):
+            file_ids -= set(directory.sudo().mapped("files").ids)
+        return len(file_ids) if count else list(file_ids)
+
+
+    def _filter_access(self, operation):
+        records = super(File, self)._filter_access(operation)
+        if self.env.user.id == SUPERUSER_ID or isinstance(self.env.uid, NoSecurityUid):
+            return records
+        directories = self._get_directories_from_database(records.ids)
+        for directory in directories - directories._filter_access("read"):
+            records -= self.browse(directory.sudo().mapped("files").ids)
+        return records
+
+
+    def check_access(self, operation, raise_exception=False):
+        res = super(File, self).check_access(operation, raise_exception)
+        try:
+            return res and self.check_directory_access(operation) == None
+        except AccessError:
+            if raise_exception:
+                raise
+            return False
+
+
+    def check_directory_access(self, operation, vals={}, raise_exception=False):
+        if self.env.user.id == SUPERUSER_ID or isinstance(self.env.uid, NoSecurityUid):
+            return None
+        if "directory" in vals and vals["directory"]:
+            records = self.env["dms.directory"].browse(vals["directory"])
+        else:
+            records = self._get_directories_from_database(self.ids)
+        return records.check_access(operation, raise_exception)
+
+    # ----------------------------------------------------------
+    # Constrains
+    # ----------------------------------------------------------
+
+    @api.constrains("name")
     def _check_name(self):
-        if not self.check_name(self.name):
-            raise ValidationError(_("The file name is invalid."))
-        childs = self.sudo().directory.files.mapped(lambda rec: [rec.id, rec.name])
-        duplicates = [rec for rec in childs if rec[1] == self.name and rec[0] != self.id]
-        if duplicates:
-            raise ValidationError(_("A file with the same name already exists."))
-        
-    @api.constrains('name')
+        for record in self:
+            if not file.check_name(record.name):
+                raise ValidationError(_("The file name is invalid."))
+            files = record.sudo().directory.files.name_get()
+            if list(
+                filter(
+                    lambda file: file[1] == record.name and file[0] != record.id, files
+                )
+            ):
+                raise ValidationError(_("A file with the same name already exists."))
+
+    @api.constrains("extension")
     def _check_extension(self):
-        forbidden_extensions = self.forbidden_extensions()
-        file_extension = self._compute_extension(write=False)['extension']
-        if file_extension and file_extension in forbidden_extensions:
-            raise ValidationError(_("The file has a forbidden file extension."))
-        
-    @api.constrains('content')
+        for record in self:
+            if (
+                record.extension
+                and record.extension in self._get_forbidden_extensions()
+            ):
+                raise ValidationError(_("The file has a forbidden file extension."))
+
+    @api.constrains("size")
     def _check_size(self):
-        max_upload_size = self.max_upload_size()
-        if (max_upload_size * 1024 * 1024) < len(base64.b64decode(self.content)):
-            raise ValidationError(_("The maximum upload size is %s MB).") % max_upload_size)
-    
-    @api.constrains('directory')
+        for record in self:
+            if record.size and record.size > self._get_binary_max_size() * 1024 * 1024:
+                raise ValidationError(
+                    _("The maximum upload size is %s MB).")
+                    % self._get_binary_max_size()
+                )
+
+    @api.constrains("directory_id")
     def _check_directory_access(self):
         for record in self:
-            record.directory.check_access('create', raise_exception=True)
-    
-    @api.multi
+            if not record.directory.check_access("create", raise_exception=False):
+                raise ValidationError(
+                    _("The directory has to have the permission to create files.")
+                )
+
+    # ----------------------------------------------------------
+    # Create, Update, Delete
+    # ----------------------------------------------------------
+
+
     def _inverse_content(self):
+        updates = defaultdict(set)
         for record in self:
-            if record.content:
-                content = record.content
-                size = len(base64.b64decode(content))
-                reference = record.reference
-                if reference:
-                    record._update_reference_values({'content': content})
-                    record.write({'size': size})
-                else:
-                    directory = record.directory
-                    settings = record.settings if record.settings else directory.settings
-                    reference = record._create_reference(
-                        settings, directory.path, record.name, content)
-                    reference = "%s,%s" % (reference._name, reference.id)
-                    record.write({'reference': reference, 'size': size})
-            else:
-                record._unlink_reference()
-                record.reference = None
-    
-    @api.model
-    def _before_create(self, vals, *largs, **kwargs):
-        tools.image_resize_images(
-            vals, big_name='custom_thumbnail',
-            medium_name='custom_thumbnail_medium',
-            small_name='custom_thumbnail_small')
-        return super(File, self)._before_create(vals, *largs, **kwargs)
+            values = self._get_content_inital_vals()
+            binary = base64.b64decode(record.content or "")
+            values = self._update_content_vals(record, values, binary)
+            values.update(
+                {"content_binary": record.content,}
+            )
+            updates[tools.frozendict(values)].add(record.id)
+        with self.env.norecompute():
+            for vals, ids in updates.items():
+                self.browse(ids).write(dict(vals))
+        self.recompute()
 
-    @api.multi
-    def _before_write(self, vals, *largs, **kwargs):
-        tools.image_resize_images(
-            vals, big_name='custom_thumbnail',
-            medium_name='custom_thumbnail_medium',
-            small_name='custom_thumbnail_small')
-        return super(File, self)._before_write(vals, *largs, **kwargs)
 
-    @api.multi
-    def _before_unlink(self, *largs, **kwargs):
-        info = super(File, self)._before_unlink(*largs, **kwargs)
-        references = [
-            list((k, list(map(lambda rec: rec.reference.id, v)))) 
-               for k, v in itertools.groupby(
-                   self.sorted(key=lambda rec: rec.reference._name),
-                   lambda rec: rec.reference._name)]
-        info['references'] = references
-        return info
-    
-    @api.multi
-    def _after_unlink(self, result, info, infos, *largs, **kwargs):
-        super(File, self)._after_unlink(result, info, infos, *largs, **kwargs)
-        if 'references' in info and info['references']:
-            for tuple in info['references']:
-                self.env[tuple[0]].sudo().browse(list(filter(None, tuple[1]))).unlink()
-    
-    @api.returns('self', lambda value: value.id)
+    @api.returns("self", lambda value: value.id)
     def copy(self, default=None):
         self.ensure_one()
         default = dict(default or [])
         names = []
-        if 'directory' in default:
-            directory = self.env['muk_dms.directory'].sudo().browse(default['directory'])
-            names = directory.files.mapped('name')
+        if "directory" in default:
+            model = self.env["dms.directory"]
+            directory = model.browse(default["directory"])
+            names = directory.sudo().files.mapped("name")
         else:
-            names = self.sudo().directory.files.mapped('name')
-        default.update({'name': self.unique_name(self.name, names, self.extension)})
-        vals = self.copy_data(default)[0]
-        if 'reference' in vals:
-            del vals['reference']
-        if not 'content' in vals:
-            vals.update({'content': self.content})
-        new = self.with_context(lang=None).create(vals)
-        self.copy_translations(new)
-        return new
-    
-    @api.multi
-    def _check_recomputation(self, vals, olds, *largs, **kwargs):
-        super(File, self)._check_recomputation(vals, olds, *largs, **kwargs)
-        fields = []
-        if 'name' in vals:
-            fields.extend(['extension', 'mimetype', 'path'])
-        if 'directory' in vals:
-            fields.extend(['settings', 'path'])
-        if 'content' in vals:
-            fields.extend(['index_content'])
-        if fields:
-            self.trigger_computation(fields)
-        self._check_reference_values(vals)
-    
+            names = self.sudo().directory.files.mapped("name")
+        default.update({"name": file.unique_name(self.name, names, self.extension)})
+        self.check_directory_access("create", default, True)
+        return super(File, self).copy(default)
+
+
+    def write(self, vals):
+        self.check_directory_access("write", vals, True)
+        self.check_lock()
+        return super(File, self).write(vals)
+
+
+    def unlink(self):
+        self.check_directory_access("unlink", {}, True)
+        self.check_lock()
+        return super(File, self).unlink()
+
     #----------------------------------------------------------
-    # Reference
+    # Locking fields and functions
     #----------------------------------------------------------
-    
-    @api.multi
-    def _create_reference(self, settings, path, filename, content):
-        self.ensure_one()
-        self.check_access('create', raise_exception=True)
-        if settings.save_type == 'database':
-            return self.env['muk_dms.data_database'].sudo().create({'data': content})
-        return None
-    
-    @api.multi
-    def _update_reference_values(self, values):
-        self.check_access('write', raise_exception=True)
-        references = self.sudo().mapped('reference')
-        if references:
-            references.sudo().update(values)
-    
-    @api.multi
-    def _update_reference_type(self):
-        self.check_access('write', raise_exception=True)
+
+    locked_by = fields.Many2one(
+        comodel_name='res.users',
+        string="Locked by")
+
+    is_locked = fields.Boolean(
+        compute='_compute_locked',
+        string="Locked")
+
+    is_lock_editor = fields.Boolean(
+        compute='_compute_locked',
+        string="Editor")
+
+    #----------------------------------------------------------
+    # Locking
+    #----------------------------------------------------------
+
+
+    def lock(self):
+        self.write({'locked_by': self.env.uid})
+
+
+    def unlock(self):
+        self.write({'locked_by': None})
+
+    @api.model
+    def _check_lock_editor(self, lock_uid):
+        return lock_uid in (self.env.uid, SUPERUSER_ID) or isinstance(self.env.uid, NoSecurityUid)
+
+
+    def check_lock(self):
         for record in self:
-            if record.reference and record.settings.save_type != record.reference.type():
-                reference = record._create_reference(
-                    record.settings, record.directory.path, record.name, record.content)
-                record._unlink_reference()
-                record.reference = "%s,%s" % (reference._name, reference.id)
-    
-    @api.multi
-    def _check_reference_values(self, values):
-        self.check_access('write', raise_exception=True)
-        if 'content' in values:
-            self._update_reference_values({'content': values['content']})
-        if 'settings' in values:
-            self._update_reference_type()
-            
-    @api.multi
-    def _get_content(self):
-        self.ensure_one()
-        self.check_access('read', raise_exception=True)
-        return self.reference.sudo().content() if self.reference else None
-    
-    @api.multi
-    def _unlink_reference(self):
-        self.check_access('unlink', raise_exception=True)
-        for tuple in [
-            list((k, list(map(lambda rec: rec.reference.id, v)))) 
-               for k, v in itertools.groupby(
-                   self.sorted(key=lambda rec: rec.reference._name),
-                   lambda rec: rec.reference._name)]:
-            self.env[tuple[0]].sudo().browse(list(filter(None, tuple[1]))).unlink()
+            if record.locked_by.exists() and not self._check_lock_editor(record.locked_by.id):
+                message = _("The record (%s [%s]) is locked, by an other user.")
+                raise AccessError(message % (record._description, record.id))
+
+    #----------------------------------------------------------
+    # Read, View
+    #----------------------------------------------------------
+
+    @api.depends('locked_by')
+    def _compute_locked(self):
+        for record in self:
+            if record.locked_by.exists():
+                record.update({'is_locked': True, 'is_lock_editor': record.locked_by.id == record.env.uid})
+            else:
+                record.update({'is_locked': False, 'is_lock_editor': False})
