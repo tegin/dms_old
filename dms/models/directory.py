@@ -8,7 +8,7 @@ from collections import defaultdict
 from odoo import _, api, fields, models, tools
 from odoo.exceptions import AccessError, ValidationError
 
-from .dms_file import check_name, unique_name
+from ..tools.file import check_name, unique_name
 
 _logger = logging.getLogger(__name__)
 
@@ -19,7 +19,6 @@ class DmsDirectory(models.Model):
     _description = "Directory"
 
     _inherit = [
-        "muk_utils.mixins.hierarchy",
         "dms.security.mixin",
         "dms.mixins.thumbnail",
     ]
@@ -32,6 +31,7 @@ class DmsDirectory(models.Model):
 
     name = fields.Char(string="Name", required=True, index=True)
 
+    parent_path = fields.Char()
     is_root_directory = fields.Boolean(
         string="Is Root Directory",
         default=False,
@@ -74,10 +74,10 @@ class DmsDirectory(models.Model):
         copy=False,
     )
     is_hidden = fields.Boolean(
-        string="Storage is Hidden", related="storage.is_hidden", readonly=True
+        string="Storage is Hidden", related="storage_id.is_hidden", readonly=True
     )
     company_id = fields.Many2one(
-        related="storage.company",
+        related="storage_id.company_id",
         comodel_name="res.company",
         string="Company",
         readonly=True,
@@ -97,8 +97,8 @@ class DmsDirectory(models.Model):
         comodel_name="dms.tag",
         relation="dms_directory_tag_rel",
         domain="""[
-            '|', ['category', '=', False],
-            ['category', 'child_of', category]]
+            '|', ['category_id', '=', False],
+            ['category_id', 'child_of', category_id]]
         """,
         column1="did",
         column2="tid",
@@ -122,7 +122,7 @@ class DmsDirectory(models.Model):
 
     file_ids = fields.One2many(
         comodel_name="dms.file",
-        inverse_name="directory",
+        inverse_name="directory_id",
         string="Files",
         auto_join=False,
         copy=False,
@@ -184,7 +184,7 @@ class DmsDirectory(models.Model):
         search_domain = (kwargs.get("search_domain", []),)
         if search_domain and len(search_domain):
             for domain in search_domain[0]:
-                if domain[0] == "parent_directory":
+                if domain[0] == "parent_id":
                     return domain[1], domain[2]
         return None, None
 
@@ -212,28 +212,28 @@ class DmsDirectory(models.Model):
             else:
                 category.complete_name = category.name
 
-    @api.depends("root_storage", "parent_directory")
+    @api.depends("root_storage_id", "parent_id")
     def _compute_storage(self):
         for record in self:
             if record.is_root_directory:
-                record.storage = record.root_storage
+                record.storage = record.root_storage_id
             else:
-                record.storage = record.parent_directory.storage
+                record.storage = record.parent_id.storage_id
 
-    @api.depends("user_stars")
+    @api.depends("user_star_ids")
     def _compute_starred(self):
         for record in self:
-            record.starred = self.env.user in record.user_stars
+            record.starred = self.env.user in record.user_star_ids
 
-    @api.depends("child_directories")
+    @api.depends("child_directory_ids")
     def _compute_count_directories(self):
         for record in self:
-            record.count_directories = len(record.child_directories)
+            record.count_directories = len(record.child_directory_ids)
 
-    @api.depends("files")
+    @api.depends("file_ids")
     def _compute_count_files(self):
         for record in self:
-            record.count_files = len(record.files)
+            record.count_files = len(record.file_ids)
 
     @api.depends("child_directory_ids", "file_ids")
     def _compute_count_elements(self):
@@ -276,9 +276,9 @@ class DmsDirectory(models.Model):
     @api.onchange("is_root_directory")
     def _onchange_directory_type(self):
         if self.is_root_directory:
-            self.parent_directory = None
+            self.parent_id = None
         else:
-            self.root_storage = None
+            self.root_storage_id = None
 
     @api.onchange("category_id")
     def _change_category(self):
@@ -353,37 +353,50 @@ class DmsDirectory(models.Model):
                 starred_records |= record
             elif record.starred and self.env.user not in record.user_star_ids:
                 not_starred_records |= record
-        not_starred_records.write({"user_stars": [(4, self.env.uid)]})
-        starred_records.write({"user_stars": [(3, self.env.uid)]})
+        not_starred_records.write({"user_star_ids": [(4, self.env.uid)]})
+        starred_records.write({"user_star_ids": [(3, self.env.uid)]})
 
     @api.returns("self", lambda value: value.id)
     def copy(self, default=None):
         self.ensure_one()
         default = dict(default or [])
-        if "root_storage" in default:
-            storage = self.env["dms.storage"].browse(default["root_storage"])
-            names = storage.sudo().root_directories.mapped("name")
-        elif "parent_directory" in default:
-            parent_directory = self.browse(default["parent_directory"])
-            names = parent_directory.sudo().child_directories.mapped("name")
+        if "root_storage_id" in default:
+            storage = self.env["dms.storage"].browse(default["root_storage_id"])
+            names = storage.sudo().root_directory_ids.mapped("name")
+        elif "parent_id" in default:
+            parent_directory = self.browse(default["parent_id"])
+            names = parent_directory.sudo().child_directory_ids.mapped("name")
         elif self.is_root_directory:
-            names = self.sudo().root_storage.root_directories.mapped("name")
+            names = self.sudo().root_storage_id.root_directory_ids.mapped("name")
         else:
-            names = self.sudo().parent_directory.child_directories.mapped("name")
+            names = self.sudo().parent_id.child_directory_ids.mapped("name")
         default.update({"name": unique_name(self.name, names)})
         new = super().copy(default)
-        for record in self.files:
-            record.copy({"directory": new.id})
-        for record in self.child_directories:
-            record.copy({"parent_directory": new.id})
+        for record in self.file_ids:
+            record.copy({"directory_id": new.id})
+        for record in self.child_directory_ids:
+            record.copy({"parent_id": new.id})
         return new
+
+    @api.model_create_multi
+    def create(self, vals_list):
+        for vals in vals_list:
+            if vals.get("root_storage_id", False):
+                vals["storage_id"] = vals["root_storage_id"]
+            if vals.get("parent_id", False):
+                parent = self.browse([vals["parent_id"]])
+                data = next(iter(parent.sudo().read(["storage_id"])), {})
+                vals["storage_id"] = self._convert_to_write(data).get("storage_id")
+        return super().create(vals_list)
 
     def write(self, vals):
         res = super().write(vals)
-        if self and any(field in vals for field in ["root_storage_id", "parent_id"]):
+        if self and any(
+            field for field in vals if field in ["root_storage_id", "parent_id"]
+        ):
             records = self.sudo().search([("id", "child_of", self.ids)]) - self
             if "root_storage_id" in vals:
-                records.write({"storage_id": vals["root_storage"]})
+                records.write({"storage_id": vals["root_storage_id"]})
             elif "parent_id" in vals:
                 parent = self.browse([vals["parent_id"]])
                 data = next(iter(parent.sudo().read(["storage_id"])), {})
@@ -404,7 +417,7 @@ class DmsDirectory(models.Model):
             if self.env["dms.file"].sudo().search(domain):
                 raise AccessError(_("A file is locked, the folder cannot be deleted."))
             self.env["dms.file"].sudo().search(
-                [("directory", "child_of", self.ids)]
+                [("directory_id", "child_of", self.ids)]
             ).unlink()
             return super(
                 DmsDirectory, self.sudo().search([("id", "child_of", self.ids)])

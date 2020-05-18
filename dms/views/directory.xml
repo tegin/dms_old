@@ -26,24 +26,24 @@
         <field name="res_model">dms.directory</field>
         <field name="view_mode">kanban,tree,form</field>
         <field name="domain">
-		[
-			("parent_id", "=",  active_id),
-			("is_hidden", "=",  False),
-		]
-	</field>
+            [
+            ("parent_id", "=", active_id),
+            ("is_hidden", "=", False),
+            ]
+        </field>
         <field name="context">
-		{
-			'default_parent_id': active_id,
-		}
-    </field>
+            {
+            'default_parent_id': active_id,
+            }
+        </field>
         <field name="help" type="html">
             <p class="o_view_nocontent_smiling_face">
-	      	Click to add a new directory.
-	    </p>
+                Click to add a new directory.
+            </p>
             <p>
-			Directories can be used to structure and organize
-			files directly in Odoo.
-	    </p>
+                Directories can be used to structure and organize
+                files directly in Odoo.
+            </p>
         </field>
     </record>
     <record id="action_dms_files_directory" model="ir.actions.act_window">
@@ -51,23 +51,23 @@
         <field name="res_model">dms.file</field>
         <field name="view_mode">kanban,tree,graph,pivot,form</field>
         <field name="domain">
-		[
-			("directory", "=",  active_id),
-			("is_hidden", "=",  False),
-		]
-	</field>
+            [
+            ("directory", "=", active_id),
+            ("is_hidden", "=", False),
+            ]
+        </field>
         <field name="context">
-		{
-			'default_directory': active_id,
-		}
-    </field>
+            {
+            'default_directory': active_id,
+            }
+        </field>
         <field name="help" type="html">
             <p class="o_view_nocontent_smiling_face">
-	      	Click to add a new file.
-	    </p>
+                Click to add a new file.
+            </p>
             <p>
-			Files are used to save content directly in Odoo.
-	    </p>
+                Files are used to save content directly in Odoo.
+            </p>
         </field>
     </record>
     <record id="action_dms_directories_all_directory" model="ir.actions.act_window">
@@ -75,25 +75,25 @@
         <field name="res_model">dms.directory</field>
         <field name="view_mode">kanban,tree,form</field>
         <field name="domain">
-		[
-			("parent_id", "child_of",  active_id),
-			("is_hidden", "=",  False),
-			("id", "!=",  active_id),
-		]
-	</field>
+            [
+            ("parent_id", "child_of", active_id),
+            ("is_hidden", "=", False),
+            ("id", "!=", active_id),
+            ]
+        </field>
         <field name="context">
-		{
-			'default_parent_id': active_id,
-		}
-    </field>
+            {
+            'default_parent_id': active_id,
+            }
+        </field>
         <field name="help" type="html">
             <p class="o_view_nocontent_smiling_face">
-	      	Click to add a new directory.
-	    </p>
+                Click to add a new directory.
+            </p>
             <p>
-			Directories can be used to structure and organize
-			files directly in Odoo.
-	    </p>
+                Directories can be used to structure and organize
+                files directly in Odoo.
+            </p>
         </field>
     </record>
     <record id="action_dms_files_all_directory" model="ir.actions.act_window">
@@ -101,23 +101,23 @@
         <field name="res_model">dms.file</field>
         <field name="view_mode">kanban,tree,graph,pivot,form</field>
         <field name="domain">
-		[
-			("directory_id", "child_of",  active_id),
-			("is_hidden", "=",  False),
-		]
-	</field>
+            [
+            ("directory_id", "child_of", active_id),
+            ("is_hidden", "=", False),
+            ]
+        </field>
         <field name="context">
-		{
-			'default_directory_id': active_id,
-		}
-    </field>
+            {
+            'default_directory_id': active_id,
+            }
+        </field>
         <field name="help" type="html">
             <p class="o_view_nocontent_smiling_face">
-	      	Click to add a new file.
-	    </p>
+                Click to add a new file.
+            </p>
             <p>
-			Files are used to save content directly in Odoo.
-	    </p>
+                Files are used to save content directly in Odoo.
+            </p>
         </field>
     </record>
     <record id="search_dms_directory" model="ir.ui.view">
@@ -186,7 +186,7 @@
                 banner_route="/dms/document_onboarding/directory"
             >
                 <field name="id" />
-                <field name="tags" />
+                <field name="tag_ids" />
                 <field name="name" />
                 <field name="color" />
                 <field name="starred" />
@@ -215,51 +215,59 @@
                                 <div class="dropdown-menu" role="menu">
                                     <div class="row">
                                         <div class="col-6 mk_directory_kanban_views">
-                                            <h6 class="dropdown-header">Views</h6>
+                                            <h6 class="dropdown-header">Views
+                                            </h6>
                                             <a
                                                 type="action"
                                                 name="%(dms.action_dms_directories_all_directory)d"
                                                 role="menuitem"
                                                 class="dropdown-item"
                                             >
-											<i class="fa fa-folder-o" /> Directories
-										</a>
+                                                <i class="fa fa-folder-o" />
+                                                Directories
+                                            </a>
                                             <a
                                                 type="action"
                                                 name="%(dms.action_dms_files_all_directory)d"
                                                 role="menuitem"
                                                 class="dropdown-item"
                                             >
-											<i class="fa fa-file-o" /> Files
-										</a>
+                                                <i class="fa fa-file-o" />
+                                                Files
+                                            </a>
                                         </div>
                                         <div
                                             class="col-6 border-left mk_directory_kanban_actions"
                                         >
-                                            <h6 class="dropdown-header">Actions</h6>
+                                            <h6 class="dropdown-header">
+                                                Actions
+                                            </h6>
                                             <a
                                                 role="menuitem"
                                                 type="open"
                                                 class="dropdown-item"
                                             >
-											<i class="fa fa-external-link" /> Open
-										</a>
+                                                <i class="fa fa-external-link" />
+                                                Open
+                                            </a>
                                             <a
                                                 t-if="record.permission_write.raw_value"
                                                 role="menuitem"
                                                 type="edit"
                                                 class="dropdown-item"
                                             >
-											<i class="fa fa-pencil-square-o" /> Edit
-										</a>
+                                                <i class="fa fa-pencil-square-o" />
+                                                Edit
+                                            </a>
                                             <a
                                                 t-if="record.permission_unlink.raw_value"
                                                 role="menuitem"
                                                 type="delete"
                                                 class="dropdown-item"
                                             >
-											<i class="fa fa-trash-o" /> Delete
-										</a>
+                                                <i class="fa fa-trash-o" />
+                                                Delete
+                                            </a>
                                         </div>
                                     </div>
                                     <div
@@ -315,7 +323,7 @@
                                         </div>
                                         <div class="o_kanban_record_body">
                                             <field
-                                                name="tags"
+                                                name="tag_ids"
                                                 widget="many2many_tags"
                                                 options="{'color_field': 'color'}"
                                             />
@@ -355,12 +363,12 @@
                         select="multi"
                         icon="fa-star"
                     />
-                    <field name="category" select="multi" icon="fa-users" />
+                    <field name="category_id" select="multi" icon="fa-users" />
                     <field
-                        name="tags"
+                        name="tag_ids"
                         select="multi"
                         icon="fa-tag"
-                        groupby="category"
+                        groupby="category_id"
                     />
                 </searchpanel>
             </kanban>
@@ -386,7 +394,7 @@
         <field name="arch" type="xml">
             <form string="Directory" js_class="directory_form">
                 <header>
-			</header>
+                </header>
                 <sheet>
                     <div class="oe_button_box" name="button_box">
                         <button
@@ -572,15 +580,15 @@
         <field name="name">Directories</field>
         <field name="res_model">dms.directory</field>
         <field name="view_mode">kanban,tree,form</field>
-        <field name="domain">[("is_hidden", "=",  False)]</field>
+        <field name="domain">[("is_hidden", "=", False)]</field>
         <field name="help" type="html">
             <p class="o_view_nocontent_smiling_face">
-	      	Add a new Directory.
-	    </p>
+                Add a new Directory.
+            </p>
             <p>
-			Directories can be used to structure and organize
-			files directly in Odoo.
-	    </p>
+                Directories can be used to structure and organize
+                files directly in Odoo.
+            </p>
         </field>
     </record>
     <menuitem
@@ -596,10 +604,19 @@
         <field name="inherit_id" ref="view_dms_directory_form" />
         <field name="mode">primary</field>
         <field name="arch" type="xml">
-            <xpath expr="//header" position="replace" />
-            <xpath expr="//sheet//div[hasclass('oe_button_box')]" position="replace" />
-            <xpath expr="//sheet//group[@name='settings']" position="replace" />
-            <xpath expr="//sheet//group[@name='data']" position="replace">
+            <xpath expr="//header" position="attributes">
+                <attribute name="invisible">1</attribute>
+            </xpath>
+            <xpath expr="//sheet//div[hasclass('oe_button_box')]" position="attributes">
+                <attribute name="invisible">1</attribute>
+            </xpath>
+            <xpath expr="//sheet//group[@name='settings']" position="attributes">
+                <attribute name="invisible">1</attribute>
+            </xpath>
+            <xpath expr="//sheet//group[@name='data']" position="attributes">
+                <attribute name="invisible">1</attribute>
+            </xpath>
+            <xpath expr="//sheet//group[@name='data']" position="after">
                 <group>
                     <group>
                         <field name="is_root_directory" readonly="1" />
@@ -624,7 +641,7 @@
                 </group>
             </xpath>
             <form position="inside">
-                <footer position="replace">
+                <footer>
                     <button
                         class="btn btn-primary"
                         type="object"

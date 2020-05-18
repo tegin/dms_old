@@ -37,7 +37,7 @@
                         name="group_by_category"
                         string="Category"
                         domain="[]"
-                        context="{'group_by': 'category'}"
+                        context="{'group_by': 'category_id'}"
                     />
                     <filter
                         name="group_by_color"
@@ -80,22 +80,25 @@
                                         type="open"
                                         class="dropdown-item"
                                     >
-									<i class="fa fa-external-link" /> Open
-								</a>
+                                        <i class="fa fa-external-link" />
+                                        Open
+                                    </a>
                                     <a
                                         role="menuitem"
                                         type="edit"
                                         class="dropdown-item"
                                     >
-									<i class="fa fa-pencil-square-o" /> Edit
-								</a>
+                                        <i class="fa fa-pencil-square-o" />
+                                        Edit
+                                    </a>
                                     <a
                                         role="menuitem"
                                         type="delete"
                                         class="dropdown-item"
                                     >
-									<i class="fa fa-trash-o" /> Delete
-								</a>
+                                        <i class="fa fa-trash-o" />
+                                        Delete
+                                    </a>
                                     <ul
                                         class="oe_kanban_colorpicker"
                                         data-field="color"
@@ -116,7 +119,7 @@
             <tree string="Tags">
                 <field name="active" />
                 <field name="name" />
-                <field name="category" />
+                <field name="category_id" />
                 <field name="color" widget="color_index" />
             </tree>
         </field>
@@ -145,7 +148,7 @@
                     </div>
                     <group>
                         <group>
-                            <field name="category" />
+                            <field name="category_id" />
                             <field name="color" widget="color_index" />
                         </group>
                         <group>
@@ -155,10 +158,10 @@
                     </group>
                     <notebook>
                         <page string="Directories">
-                            <field name="directories" widget="one2many" mode="tree" />
+                            <field name="directory_ids" widget="one2many" mode="tree" />
                         </page>
                         <page string="Files">
-                            <field name="files" widget="one2many" mode="tree" />
+                            <field name="file_ids" widget="one2many" mode="tree" />
                         </page>
                     </notebook>
                 </sheet>
@@ -172,11 +175,11 @@
         <field name="context">{'search_default_group_by_category': 1}</field>
         <field name="help" type="html">
             <p class="o_view_nocontent_smiling_face">
-	      	Click to create a new tag.
-	    </p>
+                Click to create a new tag.
+            </p>
             <p>
-			Tags are used to categorize Documents.
-	    </p>
+                Tags are used to categorize Documents.
+            </p>
         </field>
     </record>
     <menuitem

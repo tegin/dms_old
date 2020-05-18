@@ -164,14 +164,11 @@ class ResConfigSettings(models.TransientModel):
     # Functions
     # ----------------------------------------------------------
 
-    @api.multi
     def set_values(self):
         res = super(ResConfigSettings, self).set_values()
         param = self.env["ir.config_parameter"].sudo()
         param.set_param("muk_web_utils.binary_max_size", self.documents_binary_max_size)
-        param.set_param(
-            "dms.forbidden_extensions", self.documents_forbidden_extensions
-        )
+        param.set_param("dms.forbidden_extensions", self.documents_forbidden_extensions)
         return res
 
     @api.model

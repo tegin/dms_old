@@ -34,7 +34,6 @@ class Category(models.Model):
     parent_id = fields.Many2one(
         comodel_name="dms.category",
         string="Parent Category",
-        oldname="parent_category",
         ondelete="cascade",
         index=True,
     )
@@ -42,7 +41,6 @@ class Category(models.Model):
     child_category_ids = fields.One2many(
         comodel_name="dms.category",
         inverse_name="parent_id",
-        oldname="child_categories",
         string="Child Categories",
     )
 
