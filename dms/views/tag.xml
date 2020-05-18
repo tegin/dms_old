@@ -22,8 +22,8 @@
   -->
 <odoo>
     <record id="view_dms_tag_search" model="ir.ui.view">
-        <field name="name">muk_dms_tag.search</field>
-        <field name="model">muk_dms.tag</field>
+        <field name="name">dms_tag.search</field>
+        <field name="model">dms.tag</field>
         <field name="arch" type="xml">
             <search string="Categories">
                 <field name="name" filter_domain="[('name', 'ilike', self)]" />
@@ -37,7 +37,7 @@
                         name="group_by_category"
                         string="Category"
                         domain="[]"
-                        context="{'group_by': 'category'}"
+                        context="{'group_by': 'category_id'}"
                     />
                     <filter
                         name="group_by_color"
@@ -50,8 +50,8 @@
         </field>
     </record>
     <record id="view_dms_tag_kanban" model="ir.ui.view">
-        <field name="name">muk_dms_tag.kanban</field>
-        <field name="model">muk_dms.tag</field>
+        <field name="name">dms_tag.kanban</field>
+        <field name="model">dms.tag</field>
         <field name="arch" type="xml">
             <kanban
                 class="o_kanban_small_column o_emphasize_colors"
@@ -80,22 +80,25 @@
                                         type="open"
                                         class="dropdown-item"
                                     >
-									<i class="fa fa-external-link" /> Open
-								</a>
+                                        <i class="fa fa-external-link" />
+                                        Open
+                                    </a>
                                     <a
                                         role="menuitem"
                                         type="edit"
                                         class="dropdown-item"
                                     >
-									<i class="fa fa-pencil-square-o" /> Edit
-								</a>
+                                        <i class="fa fa-pencil-square-o" />
+                                        Edit
+                                    </a>
                                     <a
                                         role="menuitem"
                                         type="delete"
                                         class="dropdown-item"
                                     >
-									<i class="fa fa-trash-o" /> Delete
-								</a>
+                                        <i class="fa fa-trash-o" />
+                                        Delete
+                                    </a>
                                     <ul
                                         class="oe_kanban_colorpicker"
                                         data-field="color"
@@ -110,20 +113,20 @@
         </field>
     </record>
     <record id="view_dms_tag_tree" model="ir.ui.view">
-        <field name="name">muk_dms_tag.tree</field>
-        <field name="model">muk_dms.tag</field>
+        <field name="name">dms_tag.tree</field>
+        <field name="model">dms.tag</field>
         <field name="arch" type="xml">
             <tree string="Tags">
                 <field name="active" />
                 <field name="name" />
-                <field name="category" />
+                <field name="category_id" />
                 <field name="color" widget="color_index" />
             </tree>
         </field>
     </record>
     <record id="view_dms_tag_form" model="ir.ui.view">
-        <field name="name">muk_dms_tag.form</field>
-        <field name="model">muk_dms.tag</field>
+        <field name="name">dms_tag.form</field>
+        <field name="model">dms.tag</field>
         <field name="arch" type="xml">
             <form string="Tag">
                 <sheet>
@@ -145,7 +148,7 @@
                     </div>
                     <group>
                         <group>
-                            <field name="category" />
+                            <field name="category_id" />
                             <field name="color" widget="color_index" />
                         </group>
                         <group>
@@ -155,10 +158,10 @@
                     </group>
                     <notebook>
                         <page string="Directories">
-                            <field name="directories" widget="one2many" mode="tree" />
+                            <field name="directory_ids" widget="one2many" mode="tree" />
                         </page>
                         <page string="Files">
-                            <field name="files" widget="one2many" mode="tree" />
+                            <field name="file_ids" widget="one2many" mode="tree" />
                         </page>
                     </notebook>
                 </sheet>
@@ -167,22 +170,22 @@
     </record>
     <record id="action_dms_tag" model="ir.actions.act_window">
         <field name="name">Tags</field>
-        <field name="res_model">muk_dms.tag</field>
+        <field name="res_model">dms.tag</field>
         <field name="view_mode">kanban,tree,form</field>
         <field name="context">{'search_default_group_by_category': 1}</field>
         <field name="help" type="html">
             <p class="o_view_nocontent_smiling_face">
-	      	Click to create a new tag.
-	    </p>
+                Click to create a new tag.
+            </p>
             <p>
-			Tags are used to categorize Documents.
-	    </p>
+                Tags are used to categorize Documents.
+            </p>
         </field>
     </record>
     <menuitem
         id="menu_dms_tag"
         name="Tags"
-        parent="cat_menu_muk_dms_config_organizing"
+        parent="cat_menu_dms_config_organizing"
         action="action_dms_tag"
     />
 </odoo>

@@ -101,29 +101,27 @@ class ResCompany(models.Model):
 
     @api.model
     def action_open_documents_onboarding_storage(self):
-        return self.env.ref("muk_dms.action_dms_storage_new").read()[0]
+        return self.env.ref("dms.action_dms_storage_new").read()[0]
 
     @api.model
     def action_open_documents_onboarding_directory(self):
-        storage = self.env["muk_dms.storage"].search(
-            [], order="create_date desc", limit=1
-        )
-        action = self.env.ref("muk_dms.action_dms_directory_new").read()[0]
+        storage = self.env["dms.storage"].search([], order="create_date desc", limit=1)
+        action = self.env.ref("dms.action_dms_directory_new").read()[0]
         action["context"] = {
             **self.env.context,
             **{
                 "default_is_root_directory": True,
-                "default_root_storage": storage and storage.id,
+                "default_root_storage_id": storage and storage.id,
             },
         }
         return action
 
     @api.model
     def action_open_documents_onboarding_file(self):
-        directory = self.env["muk_dms.directory"].search(
+        directory = self.env["dms.directory"].search(
             [], order="create_date desc", limit=1
         )
-        action = self.env.ref("muk_dms.action_dms_file_new").read()[0]
+        action = self.env.ref("dms.action_dms_file_new").read()[0]
         action["context"] = {
             **self.env.context,
             **{"default_directory": directory and directory.id},

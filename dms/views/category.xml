@@ -22,11 +22,14 @@
   -->
 <odoo>
     <record id="view_dms_category_search" model="ir.ui.view">
-        <field name="name">muk_dms_category.search</field>
-        <field name="model">muk_dms.category</field>
+        <field name="name">dms_category.search</field>
+        <field name="model">dms.category</field>
         <field name="arch" type="xml">
             <search string="Categories">
-                <field name="name" filter_domain="[('name', 'ilike', self)]" />
+                <field
+                    name="name"
+                    filter_domain="['|', ('name', 'ilike', self), ('parent_id', 'child_of', raw_value)]"
+                />
                 <filter
                     string="All"
                     name="all"
@@ -36,20 +39,20 @@
         </field>
     </record>
     <record id="view_dms_category_tree" model="ir.ui.view">
-        <field name="name">muk_dms_category.tree</field>
-        <field name="model">muk_dms.category</field>
+        <field name="name">dms_category.tree</field>
+        <field name="model">dms.category</field>
         <field name="arch" type="xml">
             <tree string="Categories" decoration-muted="(not active)">
                 <field name="active" />
                 <field name="name" />
-                <field name="parent_category" />
-                <field name="tags" />
+                <field name="parent_id" />
+                <field name="tag_ids" />
             </tree>
         </field>
     </record>
     <record id="view_dms_category_form" model="ir.ui.view">
-        <field name="name">muk_dms_category.form</field>
-        <field name="model">muk_dms.category</field>
+        <field name="name">dms_category.form</field>
+        <field name="model">dms.category</field>
         <field name="arch" type="xml">
             <form string="Category">
                 <sheet>
@@ -71,7 +74,7 @@
                     </div>
                     <group>
                         <group>
-                            <field name="parent_category" />
+                            <field name="parent_id" />
                         </group>
                         <group>
                             <field name="count_categories" string="Subcategories" />
@@ -89,18 +92,17 @@
                     <notebook>
                         <page string="Tags">
                             <field
-                                name="tags"
-                                widget="one2many"
+                                name="tag_ids"
                                 mode="kanban"
-                                context="{'default_category': active_id}"
+                                context="{'default_category_id': active_id}"
                             />
                         </page>
                         <page string="Subcategories">
                             <field
-                                name="child_categories"
+                                name="child_category_ids"
                                 widget="one2many"
                                 mode="tree"
-                                context="{'default_parent_category': active_id}"
+                                context="{'default_parent_id': active_id}"
                             />
                         </page>
                     </notebook>
@@ -110,22 +112,22 @@
     </record>
     <record id="action_dms_category" model="ir.actions.act_window">
         <field name="name">Categories</field>
-        <field name="res_model">muk_dms.category</field>
+        <field name="res_model">dms.category</field>
         <field name="view_mode">tree,form</field>
         <field name="context">{'search_default_all': 1}</field>
         <field name="help" type="html">
             <p class="o_view_nocontent_smiling_face">
-	      	Create a new Category.
-	    </p>
+                Create a new Category.
+            </p>
             <p>
-			Categories are used to categorize Documents.
-	    </p>
+                Categories are used to categorize Documents.
+            </p>
         </field>
     </record>
     <menuitem
         id="menu_dms_category"
         name="Categories"
-        parent="cat_menu_muk_dms_config_organizing"
+        parent="cat_menu_dms_config_organizing"
         action="action_dms_category"
     />
 </odoo>

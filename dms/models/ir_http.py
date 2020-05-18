@@ -25,8 +25,7 @@ import logging
 import mimetypes
 
 from odoo import models
-from odoo.exceptions import AccessError
-from odoo.http import STATIC_CACHE, request
+from odoo.http import request
 from odoo.tools.mimetypes import guess_mimetype
 
 _logger = logging.getLogger(__name__)
@@ -72,7 +71,7 @@ class IrHttp(models.AbstractModel):
         )
         if res_status == 200:
             env = env or request.env
-            if model == "muk_dms.file" and field != "content":
+            if model == "dms.file" and field != "content":
                 obj = (
                     cls._xmlid_to_obj(env, xmlid)
                     if xmlid
