@@ -10,58 +10,53 @@ _logger = logging.getLogger(__name__)
 
 
 class Tag(models.Model):
-    _name = 'dms.tag'
-    _description = 'Document Tag'
+    _name = "dms.tag"
+    _description = "Document Tag"
 
-    name = fields.Char(string='Name', required=True, translate=True)
+    name = fields.Char(string="Name", required=True, translate=True)
     active = fields.Boolean(
         default=True,
-        help="The active field allows you "
-             "to hide the tag without removing it.",
+        help="The active field allows you " "to hide the tag without removing it.",
     )
     category_id = fields.Many2one(
-        comodel_name='dms.category',
+        comodel_name="dms.category",
         context="{'dms_category_show_path': True}",
-        string='Category',
-        ondelete='set null',
-        oldname='category',
+        string="Category",
+        ondelete="set null",
     )
-    color = fields.Integer(string='Color Index', default=10)
+    color = fields.Integer(string="Color Index", default=10)
     directory_ids = fields.Many2many(
-        comodel_name='dms.directory',
-        relation='dms_directory_tag_rel',
-        column1='tid',
-        column2='did',
-        string='Directories',
+        comodel_name="dms.directory",
+        relation="dms_directory_tag_rel",
+        column1="tid",
+        column2="did",
+        string="Directories",
         readonly=True,
-        oldname='directories'
+        oldname="directories",
     )
     file_ids = fields.Many2many(
-        comodel_name='dms.file',
-        relation='dms_file_tag_rel',
-        column1='tid',
-        column2='fid',
-        string='Files',
+        comodel_name="dms.file",
+        relation="dms_file_tag_rel",
+        column1="tid",
+        column2="fid",
+        string="Files",
         readonly=True,
-        oldname='files'
     )
     count_directories = fields.Integer(
-        compute='_compute_count_directories', string='Count Directories'
+        compute="_compute_count_directories", string="Count Directories"
     )
-    count_files = fields.Integer(
-        compute='_compute_count_files', string='Count Files'
-    )
+    count_files = fields.Integer(compute="_compute_count_files", string="Count Files")
 
     _sql_constraints = [
-        ('name_uniq', 'unique (name, category)', 'Tag name already exists!'),
+        ("name_uniq", "unique (name, category)", "Tag name already exists!"),
     ]
 
-    @api.depends('directories')
+    @api.depends("directories")
     def _compute_count_directories(self):
         for rec in self:
             rec.count_directories = len(rec.directories)
 
-    @api.depends('files')
+    @api.depends("files")
     def _compute_count_files(self):
         for rec in self:
             rec.count_files = len(rec.files)
