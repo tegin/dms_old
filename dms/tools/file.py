@@ -1,36 +1,39 @@
+import base64
+import binascii
+import hashlib
+import io
+import logging
+import mimetypes
 import os
 import re
-import io
-import sys
-import base64
 import shutil
-import urllib
-import logging
-import hashlib
-import binascii
+import sys
 import tempfile
-import mimetypes
 import unicodedata
+import urllib
 
 from odoo.tools import human_size
 from odoo.tools.mimetypes import guess_mimetype
 
+
 def check_name(name):
     tmp_dir = tempfile.mkdtemp()
     try:
-        open(os.path.join(tmp_dir, name), 'a').close()
+        open(os.path.join(tmp_dir, name), "a").close()
     except IOError:
         return False
     finally:
         shutil.rmtree(tmp_dir)
     return True
 
+
 def compute_name(name, suffix, escape_suffix):
     if escape_suffix:
         name, extension = os.path.splitext(name)
-        return "%s(%s)%s" % (name, suffix, extension)
+        return "{}({}){}".format(name, suffix, extension)
     else:
-        return "%s(%s)" % (name, suffix)
+        return "{}({})".format(name, suffix)
+
 
 def unique_name(name, names, escape_suffix=False):
     if not name in names:
@@ -42,6 +45,7 @@ def unique_name(name, names, escape_suffix=False):
             suffix += 1
             name = compute_name(name, suffix, escape_suffix)
         return name
+
 
 def guess_extension(filename=None, mimetype=None, binary=None):
     extension = filename and os.path.splitext(filename)[1][1:].strip().lower()
