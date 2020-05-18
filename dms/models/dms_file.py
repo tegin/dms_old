@@ -54,7 +54,6 @@ class File(models.Model):
         auto_join=True,
         required=True,
         index=True,
-        oldname="directory",
     )
 
     storage_id = fields.Many2one(
@@ -64,7 +63,6 @@ class File(models.Model):
         auto_join=True,
         readonly=True,
         store=True,
-        oldname="storage",
     )
 
     is_hidden = fields.Boolean(
@@ -78,7 +76,6 @@ class File(models.Model):
         readonly=True,
         store=True,
         index=True,
-        oldname="company",
     )
 
     path_names = fields.Char(
@@ -95,7 +92,6 @@ class File(models.Model):
         comodel_name="dms.category",
         context="{'dms_category_show_path': True}",
         string="Category",
-        oldname="category",
     )
 
     tag_ids = fields.Many2many(
@@ -104,7 +100,6 @@ class File(models.Model):
         column1="fid",
         column2="tid",
         string="Tags",
-        oldname="tags",
     )
 
     content = fields.Binary(
