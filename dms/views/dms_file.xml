@@ -166,7 +166,7 @@
                                             <a
                                                 role="menuitem"
                                                 class="dropdown-item"
-                                                t-attf-href="/web/content?id=#{record.id.raw_value}&amp;field=content&amp;model=muk_dms.file&amp;filename_field=name&amp;download=true"
+                                                t-attf-href="/web/content?id=#{record.id.raw_value}&amp;field=content&amp;model=dms.file&amp;filename_field=name&amp;download=true"
                                             >
 		                                	<i class="fa fa-download" /> Download
 		                                </a>

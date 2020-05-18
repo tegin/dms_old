@@ -31,7 +31,12 @@ class File(models.Model):
     _description = "File"
 
     _inherit = [
+<<<<<<< HEAD:dms/models/dms_file.py
         "dms.security.mixins",
+=======
+        "muk_security.mixins.access_rights",
+        "muk_security.mixins.locking",
+>>>>>>> 111f4b4962f635240950cb0a13eb309027e8051b:dms/models/file.py
         "dms.mixins.thumbnail",
     ]
 
@@ -49,7 +54,11 @@ class File(models.Model):
         help="If a file is set to archived, it is not displayed, but still exists.",
     )
 
+<<<<<<< HEAD:dms/models/dms_file.py
     directory_id = fields.Many2one(
+=======
+    directory = fields.Many2one(
+>>>>>>> 111f4b4962f635240950cb0a13eb309027e8051b:dms/models/file.py
         comodel_name="dms.directory",
         string="Directory",
         domain="[('permission_create', '=', True)]",
@@ -61,8 +70,13 @@ class File(models.Model):
         oldname="directory",
     )
 
+<<<<<<< HEAD:dms/models/dms_file.py
     storage_id = fields.Many2one(
         related="directory_id.storage",
+=======
+    storage = fields.Many2one(
+        related="directory.storage",
+>>>>>>> 111f4b4962f635240950cb0a13eb309027e8051b:dms/models/file.py
         comodel_name="dms.storage",
         string="Storage",
         auto_join=True,
@@ -95,14 +109,22 @@ class File(models.Model):
 
     color = fields.Integer(string="Color", default=0)
 
+<<<<<<< HEAD:dms/models/dms_file.py
     category_id = fields.Many2one(
+=======
+    category = fields.Many2one(
+>>>>>>> 111f4b4962f635240950cb0a13eb309027e8051b:dms/models/file.py
         comodel_name="dms.category",
         context="{'dms_category_show_path': True}",
         string="Category",
         oldname="category",
     )
 
+<<<<<<< HEAD:dms/models/dms_file.py
     tag_ids = fields.Many2many(
+=======
+    tags = fields.Many2many(
+>>>>>>> 111f4b4962f635240950cb0a13eb309027e8051b:dms/models/file.py
         comodel_name="dms.tag",
         relation="dms_file_tag_rel",
         column1="fid",
