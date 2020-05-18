@@ -126,7 +126,9 @@
                                 <div class="dropdown-menu" role="menu">
                                     <div class="row">
                                         <div class="col-6 mk_file_kanban_operations">
-                                            <h6 class="dropdown-header">Operations</h6>
+                                            <h6 class="dropdown-header">
+                                                Operations
+                                            </h6>
                                             <a
                                                 t-if="record.permission_write.raw_value and !record.is_locked.raw_value"
                                                 role="menuitem"
@@ -134,8 +136,9 @@
                                                 type="object"
                                                 class="dropdown-item"
                                             >
-											<i class="fa fa-lock" /> Lock
-										</a>
+                                                <i class="fa fa-lock" />
+                                                Lock
+                                            </a>
                                             <a
                                                 t-if="record.is_locked.raw_value  and record.is_lock_editor.raw_value"
                                                 role="menuitem"
@@ -143,8 +146,9 @@
                                                 type="object"
                                                 class="dropdown-item"
                                             >
-											<i class="fa fa-unlock-alt" /> Unlock
-										</a>
+                                                <i class="fa fa-unlock-alt" />
+                                                Unlock
+                                            </a>
                                             <a
                                                 t-if="record.permission_write.raw_value and record.active.raw_value"
                                                 role="menuitem"
@@ -152,8 +156,9 @@
                                                 type="object"
                                                 class="dropdown-item"
                                             >
-											<i class="fa fa-archive" /> Archive
-										</a>
+                                                <i class="fa fa-archive" />
+                                                Archive
+                                            </a>
                                             <a
                                                 t-if="record.permission_write.raw_value and !record.active.raw_value"
                                                 role="menuitem"
@@ -161,43 +166,50 @@
                                                 type="object"
                                                 class="dropdown-item"
                                             >
-											<i class="fa fa-archive" /> Unarchive
-										</a>
+                                                <i class="fa fa-archive" />
+                                                Unarchive
+                                            </a>
                                             <a
                                                 role="menuitem"
                                                 class="dropdown-item"
                                                 t-attf-href="/web/content?id=#{record.id.raw_value}&amp;field=content&amp;model=muk_dms.file&amp;filename_field=name&amp;download=true"
                                             >
-		                                	<i class="fa fa-download" /> Download
-		                                </a>
+                                                <i class="fa fa-download" />
+                                                Download
+                                            </a>
                                         </div>
                                         <div
                                             class="col-6 border-left mk_file_kanban_actions"
                                         >
-                                            <h6 class="dropdown-header">Actions</h6>
+                                            <h6 class="dropdown-header">
+                                                Actions
+                                            </h6>
                                             <a
                                                 role="menuitem"
                                                 type="open"
                                                 class="dropdown-item"
                                             >
-											<i class="fa fa-external-link" /> Open
-										</a>
+                                                <i class="fa fa-external-link" />
+                                                Open
+                                            </a>
                                             <a
                                                 t-if="record.permission_write.raw_value"
                                                 role="menuitem"
                                                 type="edit"
                                                 class="dropdown-item"
                                             >
-											<i class="fa fa-pencil-square-o" /> Edit
-										</a>
+                                                <i class="fa fa-pencil-square-o" />
+                                                Edit
+                                            </a>
                                             <a
                                                 t-if="record.permission_unlink.raw_value"
                                                 role="menuitem"
                                                 type="delete"
                                                 class="dropdown-item"
                                             >
-											<i class="fa fa-trash-o" /> Delete
-										</a>
+                                                <i class="fa fa-trash-o" />
+                                                Delete
+                                            </a>
                                         </div>
                                     </div>
                                     <div
@@ -408,7 +420,7 @@
                                 name="directory_id"
                                 options="{'no_quick_create': True}"
                             />
-                            <field name="storage" options="{'no_open': True}" />
+                            <field name="storage_id" options="{'no_open': True}" />
                         </group>
                         <group>
                             <field
@@ -458,9 +470,9 @@
                         >
                             <group name="technical">
                                 <group name="technical_left">
-							</group>
+                                </group>
                                 <group name="technical_right">
-							</group>
+                                </group>
                             </group>
                         </page>
                     </notebook>
@@ -474,7 +486,7 @@
         <field name="inherit_id" ref="view_dms_file_form" />
         <field name="groups_id" eval="[(6, 0, [ref('dms.group_dms_manager')])]" />
         <field name="arch" type="xml">
-            <field name="storage" position="attributes">
+            <field name="storage_id" position="attributes">
                 <attribute name="options">{}</attribute>
             </field>
         </field>
@@ -483,14 +495,14 @@
         <field name="name">Files</field>
         <field name="res_model">dms.file</field>
         <field name="view_mode">kanban,tree,graph,pivot,form</field>
-        <field name="domain">[("is_hidden", "=",  False)]</field>
+        <field name="domain">[("is_hidden", "=", False)]</field>
         <field name="help" type="html">
             <p class="o_view_nocontent_smiling_face">
-	      	Add a new File.
-	    </p>
+                Add a new File.
+            </p>
             <p>
-			Files are used to save content directly in Odoo.
-	    </p>
+                Files are used to save content directly in Odoo.
+            </p>
         </field>
     </record>
     <menuitem
@@ -538,9 +550,8 @@
         <field name="res_model">dms.file</field>
         <field name="view_mode">tree</field>
         <field name="search_view_id" ref="search_dms_file_migration" />
-        <field
-            name="domain"
-        >['|',('active', '=',  False), ('active', '!=',  False)]</field>
+        <field name="domain">['|',('active', '=', False), ('active', '!=', False)]
+        </field>
         <field name="context">{'search_default_group_storage': 1}</field>
         <field
             name="view_ids"
@@ -548,11 +559,11 @@
         />
         <field name="help" type="html">
             <p class="o_view_nocontent_smiling_face">
-	      	Add a new File.
-	    </p>
+                Add a new File.
+            </p>
             <p>
-			Files are used to save content directly in Odoo.
-	    </p>
+                Files are used to save content directly in Odoo.
+            </p>
         </field>
     </record>
     <menuitem
@@ -568,10 +579,14 @@
         <field name="inherit_id" ref="view_dms_file_form" />
         <field name="mode">primary</field>
         <field name="arch" type="xml">
-            <xpath expr="//header" position="replace" />
-            <xpath expr="//sheet//div[hasclass('oe_button_box')]" position="replace" />
+            <xpath expr="//header" position="attributes">
+                <attribute name="invisible">1</attribute>
+            </xpath>
+            <xpath expr="//sheet//div[hasclass('oe_button_box')]" position="attributes">
+                <attribute name="invisible">1</attribute>
+            </xpath>
             <form position="inside">
-                <footer position="replace">
+                <footer>
                     <button
                         class="btn btn-primary"
                         type="object"
@@ -587,7 +602,6 @@
         <field name="name">New Root Directory</field>
         <field name="res_model">dms.file</field>
         <field name="view_mode">form</field>
-        <field name="view_type">form</field>
         <field name="target">new</field>
         <field name="view_id" ref="view_dms_file_new_form" />
     </record>

@@ -44,7 +44,7 @@ class Thumbnail(models.AbstractModel):
         prefetch=False,
     )
 
-    thumbnail = fields.fields.Image(
+    thumbnail = fields.Image(
         compute="_compute_thumbnail",
         string="Thumbnail",
         max_width=2048,

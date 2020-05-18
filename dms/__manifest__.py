@@ -30,7 +30,7 @@
     "live_test_url": "https://mukit.at/r/SgN",
     "author": "MuK IT,Odoo Community Association (OCA)",
     "contributors": ["Mathias Markl <mathias.markl@mukit.at>"],
-    "depends": ["muk_security", "muk_web_searchpanel"],
+    "depends": ["web"],
     "data": [
         "security/security.xml",
         "security/ir.model.access.csv",
@@ -40,7 +40,7 @@
         "views/menu.xml",
         "views/tag.xml",
         "views/category.xml",
-        "views/file.xml",
+        "views/dms_file.xml",
         "views/directory.xml",
         "views/storage.xml",
         "views/res_config_settings.xml",
