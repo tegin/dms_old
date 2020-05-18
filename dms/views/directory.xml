@@ -23,18 +23,17 @@
 <odoo>
     <record id="action_dms_directories_directory" model="ir.actions.act_window">
         <field name="name">Subdirectories</field>
-        <field name="view_type">form</field>
         <field name="res_model">dms.directory</field>
         <field name="view_mode">kanban,tree,form</field>
         <field name="domain">
 		[
-			("parent_directory", "=",  active_id),
+			("parent_id", "=",  active_id),
 			("is_hidden", "=",  False),
 		]
 	</field>
         <field name="context">
 		{
-			'default_parent_directory': active_id,
+			'default_parent_id': active_id,
 		}
     </field>
         <field name="help" type="html">
@@ -49,7 +48,6 @@
     </record>
     <record id="action_dms_files_directory" model="ir.actions.act_window">
         <field name="name">Files</field>
-        <field name="view_type">form</field>
         <field name="res_model">dms.file</field>
         <field name="view_mode">kanban,tree,graph,pivot,form</field>
         <field name="domain">
@@ -74,19 +72,18 @@
     </record>
     <record id="action_dms_directories_all_directory" model="ir.actions.act_window">
         <field name="name">Subdirectories</field>
-        <field name="view_type">form</field>
         <field name="res_model">dms.directory</field>
         <field name="view_mode">kanban,tree,form</field>
         <field name="domain">
 		[
-			("parent_directory", "child_of",  active_id),
+			("parent_id", "child_of",  active_id),
 			("is_hidden", "=",  False),
 			("id", "!=",  active_id),
 		]
 	</field>
         <field name="context">
 		{
-			'default_parent_directory': active_id,
+			'default_parent_id': active_id,
 		}
     </field>
         <field name="help" type="html">
@@ -101,18 +98,17 @@
     </record>
     <record id="action_dms_files_all_directory" model="ir.actions.act_window">
         <field name="name">Files</field>
-        <field name="view_type">form</field>
         <field name="res_model">dms.file</field>
         <field name="view_mode">kanban,tree,graph,pivot,form</field>
         <field name="domain">
 		[
-			("directory", "child_of",  active_id),
+			("directory_id", "child_of",  active_id),
 			("is_hidden", "=",  False),
 		]
 	</field>
         <field name="context">
 		{
-			'default_directory': active_id,
+			'default_directory_id': active_id,
 		}
     </field>
         <field name="help" type="html">
@@ -129,10 +125,7 @@
         <field name="model">dms.directory</field>
         <field name="arch" type="xml">
             <search>
-                <field
-                    name="name"
-                    filter_domain="['|', ('name','ilike',self), ('parent_path_names','ilike',self)]"
-                />
+                <field name="complete_name" />
                 <filter
                     string="My Directories"
                     name="filter_user"
@@ -171,14 +164,14 @@
                         name="group_category"
                         string="Category"
                         domain="[]"
-                        context="{'group_by':'category'}"
+                        context="{'group_by':'category_id'}"
                     />
                     <separator />
                     <filter
                         name="group_storage"
                         string="Storage"
                         domain="[]"
-                        context="{'group_by':'storage'}"
+                        context="{'group_by':'storage_id'}"
                     />
                 </group>
             </search>
@@ -356,7 +349,7 @@
                 </templates>
                 <searchpanel>
                     <field
-                        name="parent_directory"
+                        name="parent_id"
                         string="Starred"
                         domain="[['is_hidden', '=', False], ['starred', '=', True]]"
                         select="multi"
@@ -382,8 +375,8 @@
                 <field name="write_date" />
                 <field name="count_files" string="Files" />
                 <field name="count_directories" string="Directories" />
-                <field name="parent_path_names" widget="path_names" string="Path" />
-                <field name="storage" groups="dms.group_dms_manager" />
+                <field name="complete_name" />
+                <field name="storage_id" groups="dms.group_dms_manager" />
             </tree>
         </field>
     </record>
@@ -451,23 +444,19 @@
                             <field name="name" placeholder="My Documents" />
                         </h1>
                         <h4>
-                            <field
-                                name="parent_path_json"
-                                widget="path_json"
-                                options="{'prefix': True, 'suffix': True}"
-                            />
+                            <field name="complete_name" />
                         </h4>
                     </div>
                     <group name="settings">
                         <group>
                             <field name="is_root_directory" invisible="1" />
                             <field
-                                name="storage"
+                                name="storage_id"
                                 options="{'no_open': True}"
-                                attrs="{'invisible':['|', ('is_root_directory','=',True), ('parent_directory','=',False)]}"
+                                attrs="{'invisible':['|', ('is_root_directory','=',True), ('parent_id','=',False)]}"
                             />
                             <field
-                                name="root_storage"
+                                name="root_storage_id"
                                 options="{'no_open': True}"
                                 readonly="1"
                                 attrs="{'invisible':[('is_root_directory','=',False)], 'required':[('is_root_directory','=',True)]}"
@@ -475,7 +464,7 @@
                         </group>
                         <group>
                             <field
-                                name="parent_directory"
+                                name="parent_id"
                                 options="{'no_quick_create': True}"
                                 attrs="{'invisible':[('is_root_directory','=',True)], 'required':[('is_root_directory','=',False)]}"
                             />
@@ -488,12 +477,12 @@
                         </group>
                         <group>
                             <field
-                                name="category"
+                                name="category_id"
                                 placeholder="Internal / Human Resource"
                                 options="{'no_open': True, 'no_create': True}"
                             />
                             <field
-                                name="tags"
+                                name="tag_ids"
                                 widget="many2many_tags"
                                 placeholder="Tags..."
                                 options="{'color_field': 'color', 'no_create_edit': True}"
@@ -503,8 +492,8 @@
                     <notebook>
                         <page name="page_directories" string="Subdirectories">
                             <field
-                                name="child_directories"
-                                context="{'default_parent_directory': active_id, 'mail_create_nolog': True}"
+                                name="child_directory_ids"
+                                context="{'default_parent_id': active_id, 'mail_create_nolog': True}"
                                 attrs="{'readonly':[('permission_create','=',False)]}"
                             >
                                 <tree string="Subdirectories" limit="10">
@@ -520,8 +509,8 @@
                         </page>
                         <page name="page_files" string="Files">
                             <field
-                                name="files"
-                                context="{'default_directory': active_id, 'mail_create_nolog': True}"
+                                name="file_ids"
+                                context="{'default_directory_id': active_id, 'mail_create_nolog': True}"
                                 attrs="{'readonly':[('permission_create','=',False)]}"
                             >
                                 <tree string="Files" limit="10">
@@ -570,11 +559,11 @@
             <field name="is_root_directory" position="attributes">
                 <attribute name="invisible">0</attribute>
             </field>
-            <field name="root_storage" position="attributes">
+            <field name="root_storage_id" position="attributes">
                 <attribute name="readonly">0</attribute>
                 <attribute name="options">{'no_quick_create': True}</attribute>
             </field>
-            <field name="storage" position="attributes">
+            <field name="storage_id" position="attributes">
                 <attribute name="options">{}</attribute>
             </field>
         </field>
@@ -582,7 +571,6 @@
     <record id="action_dms_directory" model="ir.actions.act_window">
         <field name="name">Directories</field>
         <field name="res_model">dms.directory</field>
-        <field name="view_type">form</field>
         <field name="view_mode">kanban,tree,form</field>
         <field name="domain">[("is_hidden", "=",  False)]</field>
         <field name="help" type="html">
@@ -616,18 +604,18 @@
                     <group>
                         <field name="is_root_directory" readonly="1" />
                         <field
-                            name="root_storage"
+                            name="root_storage_id"
                             options="{'no_quick_create': True}"
                         />
                     </group>
                     <group>
                         <field
-                            name="category"
+                            name="category_id"
                             placeholder="Internal / Human Resource"
                             options="{'no_open': True, 'no_create': True}"
                         />
                         <field
-                            name="tags"
+                            name="tag_ids"
                             widget="many2many_tags"
                             placeholder="Tags..."
                             options="{'color_field': 'color', 'no_create_edit': True}"
@@ -652,7 +640,6 @@
         <field name="name">New Root Directory</field>
         <field name="res_model">dms.directory</field>
         <field name="view_mode">form</field>
-        <field name="view_type">form</field>
         <field name="target">new</field>
         <field name="view_id" ref="view_dms_directory_new_form" />
     </record>
