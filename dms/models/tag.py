@@ -19,28 +19,31 @@ class Tag(models.Model):
         help="The active field allows you "
              "to hide the tag without removing it.",
     )
-    category = fields.Many2one(
+    category_id = fields.Many2one(
         comodel_name='dms.category',
         context="{'dms_category_show_path': True}",
         string='Category',
         ondelete='set null',
+        oldname='category',
     )
     color = fields.Integer(string='Color Index', default=10)
-    directories = fields.Many2many(
+    directory_ids = fields.Many2many(
         comodel_name='dms.directory',
         relation='dms_directory_tag_rel',
         column1='tid',
         column2='did',
         string='Directories',
         readonly=True,
+        oldname='directories'
     )
-    files = fields.Many2many(
+    file_ids = fields.Many2many(
         comodel_name='dms.file',
         relation='dms_file_tag_rel',
         column1='tid',
         column2='fid',
         string='Files',
         readonly=True,
+        oldname='files'
     )
     count_directories = fields.Integer(
         compute='_compute_count_directories', string='Count Directories'
