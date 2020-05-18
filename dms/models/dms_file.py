@@ -20,8 +20,7 @@ from odoo.exceptions import AccessError, ValidationError
 from odoo.osv import expression
 from odoo.tools.mimetypes import guess_mimetype
 
-from odoo.addons.dms.tools import NoSecurityUid
-from odoo.addons.dms.tools import file
+from odoo.addons.dms.tools import NoSecurityUid, file
 
 _logger = logging.getLogger(__name__)
 
@@ -59,6 +58,7 @@ class File(models.Model):
         auto_join=True,
         required=True,
         index=True,
+        oldname="directory",
     )
 
     storage_id = fields.Many2one(
@@ -68,6 +68,7 @@ class File(models.Model):
         auto_join=True,
         readonly=True,
         store=True,
+        oldname="storage",
     )
 
     is_hidden = fields.Boolean(
@@ -81,6 +82,7 @@ class File(models.Model):
         readonly=True,
         store=True,
         index=True,
+        oldname="company",
     )
 
     path_names = fields.Char(
@@ -97,6 +99,7 @@ class File(models.Model):
         comodel_name="dms.category",
         context="{'dms_category_show_path': True}",
         string="Category",
+        oldname="category",
     )
 
     tag_ids = fields.Many2many(
@@ -105,6 +108,7 @@ class File(models.Model):
         column1="fid",
         column2="tid",
         string="Tags",
+        oldname="tags",
     )
 
     content = fields.Binary(
@@ -180,14 +184,12 @@ class File(models.Model):
         extensions = get_param("dms.forbidden_extensions", default="")
         return [extension.strip() for extension in extensions.split(",")]
 
-
     def _get_thumbnail_placeholder_name(self):
         return self.extension and "file_%s.svg" % self.extension or ""
 
     # ----------------------------------------------------------
     # Actions
     # ----------------------------------------------------------
-
 
     def action_migrate(self, logging=True):
         record_count = len(self)
@@ -198,7 +200,6 @@ class File(models.Model):
             file.with_context(migration=True).write(
                 {"content": file.with_context({}).content}
             )
-
 
     def action_save_onboarding_file_step(self):
         self.env.user.company_id.set_onboarding_step_done(
@@ -365,7 +366,6 @@ class File(models.Model):
             else:
                 record.migration = selection.get(storage_type)
 
-
     def read(self, fields=None, load="_classic_read"):
         self.check_directory_access("read", {}, True)
         return super(File, self).read(fields, load=load)
@@ -455,7 +455,6 @@ class File(models.Model):
             file_ids -= set(directory.sudo().mapped("files").ids)
         return len(file_ids) if count else list(file_ids)
 
-
     def _filter_access(self, operation):
         records = super(File, self)._filter_access(operation)
         if self.env.user.id == SUPERUSER_ID or isinstance(self.env.uid, NoSecurityUid):
@@ -465,7 +464,6 @@ class File(models.Model):
             records -= self.browse(directory.sudo().mapped("files").ids)
         return records
 
-
     def check_access(self, operation, raise_exception=False):
         res = super(File, self).check_access(operation, raise_exception)
         try:
@@ -474,7 +472,6 @@ class File(models.Model):
             if raise_exception:
                 raise
             return False
-
 
     def check_directory_access(self, operation, vals={}, raise_exception=False):
         if self.env.user.id == SUPERUSER_ID or isinstance(self.env.uid, NoSecurityUid):
@@ -532,7 +529,6 @@ class File(models.Model):
     # Create, Update, Delete
     # ----------------------------------------------------------
 
-
     def _inverse_content(self):
         updates = defaultdict(set)
         for record in self:
@@ -547,7 +543,6 @@ class File(models.Model):
             for vals, ids in updates.items():
                 self.browse(ids).write(dict(vals))
         self.recompute()
-
 
     @api.returns("self", lambda value: value.id)
     def copy(self, default=None):
@@ -564,65 +559,63 @@ class File(models.Model):
         self.check_directory_access("create", default, True)
         return super(File, self).copy(default)
 
-
     def write(self, vals):
         self.check_directory_access("write", vals, True)
         self.check_lock()
         return super(File, self).write(vals)
-
 
     def unlink(self):
         self.check_directory_access("unlink", {}, True)
         self.check_lock()
         return super(File, self).unlink()
 
-    #----------------------------------------------------------
+    # ----------------------------------------------------------
     # Locking fields and functions
-    #----------------------------------------------------------
+    # ----------------------------------------------------------
 
-    locked_by = fields.Many2one(
-        comodel_name='res.users',
-        string="Locked by")
+    locked_by = fields.Many2one(comodel_name="res.users", string="Locked by")
 
-    is_locked = fields.Boolean(
-        compute='_compute_locked',
-        string="Locked")
+    is_locked = fields.Boolean(compute="_compute_locked", string="Locked")
 
-    is_lock_editor = fields.Boolean(
-        compute='_compute_locked',
-        string="Editor")
+    is_lock_editor = fields.Boolean(compute="_compute_locked", string="Editor")
 
-    #----------------------------------------------------------
+    # ----------------------------------------------------------
     # Locking
-    #----------------------------------------------------------
-
+    # ----------------------------------------------------------
 
     def lock(self):
-        self.write({'locked_by': self.env.uid})
-
+        self.write({"locked_by": self.env.uid})
 
     def unlock(self):
-        self.write({'locked_by': None})
+        self.write({"locked_by": None})
 
     @api.model
     def _check_lock_editor(self, lock_uid):
-        return lock_uid in (self.env.uid, SUPERUSER_ID) or isinstance(self.env.uid, NoSecurityUid)
-
+        return lock_uid in (self.env.uid, SUPERUSER_ID) or isinstance(
+            self.env.uid, NoSecurityUid
+        )
 
     def check_lock(self):
         for record in self:
-            if record.locked_by.exists() and not self._check_lock_editor(record.locked_by.id):
+            if record.locked_by.exists() and not self._check_lock_editor(
+                record.locked_by.id
+            ):
                 message = _("The record (%s [%s]) is locked, by an other user.")
                 raise AccessError(message % (record._description, record.id))
 
-    #----------------------------------------------------------
+    # ----------------------------------------------------------
     # Read, View
-    #----------------------------------------------------------
+    # ----------------------------------------------------------
 
-    @api.depends('locked_by')
+    @api.depends("locked_by")
     def _compute_locked(self):
         for record in self:
             if record.locked_by.exists():
-                record.update({'is_locked': True, 'is_lock_editor': record.locked_by.id == record.env.uid})
+                record.update(
+                    {
+                        "is_locked": True,
+                        "is_lock_editor": record.locked_by.id == record.env.uid,
+                    }
+                )
             else:
-                record.update({'is_locked': False, 'is_lock_editor': False})
+                record.update({"is_locked": False, "is_lock_editor": False})
